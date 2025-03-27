@@ -1,0 +1,33 @@
+const countryCurrencies = {
+  "United States": { code: "USD", symbol: "$", currency: "US Dollar" },
+  "United Kingdom": { code: "GBP", symbol: "£", currency: "British Pound" },
+  "European Union": { code: "EUR", symbol: "€", currency: "Euro" },
+  Japan: { code: "JPY", symbol: "¥", currency: "Japanese Yen" },
+  Canada: { code: "CAD", symbol: "$", currency: "Canadian Dollar" },
+  Australia: { code: "AUD", symbol: "$", currency: "Australian Dollar" },
+  Nigeria: { code: "NGN", symbol: "₦", currency: "Nigerian Naira" },
+  India: { code: "INR", symbol: "₹", currency: "Indian Rupee" },
+  China: { code: "CNY", symbol: "¥", currency: "Chinese Yuan" },
+  Russia: { code: "RUB", symbol: "₽", currency: "Russian Ruble" },
+  Brazil: { code: "BRL", symbol: "R$", currency: "Brazilian Real" },
+  "South Africa": { code: "ZAR", symbol: "R", currency: "South African Rand" },
+  Mexico: { code: "MXN", symbol: "$", currency: "Mexican Peso" },
+  "South Korea": { code: "KRW", symbol: "₩", currency: "South Korean Won" },
+  Switzerland: { code: "CHF", symbol: "CHF", currency: "Swiss Franc" },
+  "United Arab Emirates": {
+    code: "AED",
+    symbol: "د.إ",
+    currency: "UAE Dirham",
+  },
+  "Saudi Arabia": { code: "SAR", symbol: "﷼", currency: "Saudi Riyal" },
+  Turkey: { code: "TRY", symbol: "₺", currency: "Turkish Lira" },
+  Argentina: { code: "ARS", symbol: "$", currency: "Argentine Peso" },
+  Egypt: { code: "EGP", symbol: "£", currency: "Egyptian Pound" },
+  Kenya: { code: "KES", symbol: "KSh", currency: "Kenyan Shilling" },
+  Ghana: { code: "GHS", symbol: "₵", currency: "Ghanaian Cedi" },
+  Pakistan: { code: "PKR", symbol: "₨", currency: "Pakistani Rupee" },
+  Thailand: { code: "THB", symbol: "฿", currency: "Thai Baht" },
+  Vietnam: { code: "VND", symbol: "₫", currency: "Vietnamese Dong" },
+};
+
+export default countryCurrencies;

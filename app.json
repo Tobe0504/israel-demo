@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "Lightinghaus",
+    "slug": "Lightinghaus",
+    "extra": {
+      "backendBaseUrl": "https://betaapi.thelightinghaus.com",
+      "productionBackendBaseUrl": "https://thelightinghaus.com",
+      "paystack_secret_key": "sk_test_cbbccadee059e4afa47053d8806fd65b835f2476",
+      "paystack_public_key": "pk_test_df60e0bbfa70181a3a3ea3efa256954a35b5a5db",
+      "flutterwave_public_key": "FLWPUBK_TEST-fcec4a596a3168885228ce0b43d4f47a-X",
+      "googge_web_client": "",
+      "google_ios_client_id": ""
+    },
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.Lightinghaus"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.thelightinghaus.tlh"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splashScreen.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
