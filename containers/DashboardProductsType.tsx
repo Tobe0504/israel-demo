@@ -49,7 +49,7 @@ const DashboardProductsType = () => {
           <CategoriesCard2
             title={data?.Name}
             imageURL={generateImageURL(data?.MobileUrl)}
-            onPress={() => router.push(`/(drawer)/category/${data?.Id}`)}
+            onPress={() => router.push(`/category/${data?.Id}`)}
             key={data?.MobileUrl}
           />
         );
