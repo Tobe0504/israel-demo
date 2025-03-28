@@ -34,7 +34,7 @@ const AuthHeader = () => {
           }}
         />
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ position: "absolute", left: 20, top: 20 }}
           onPress={() => router.back()}
         >
@@ -48,7 +48,7 @@ const AuthHeader = () => {
               zIndex: 10,
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ImageBackground>
     </View>
   );
