@@ -30,7 +30,7 @@ const ActiveUserHeader = ({ title }: ActiveUserHeaderTypes) => {
       }}
     >
       {navigation?.canGoBack() ? (
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.push("/dashboard")}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       ) : (
