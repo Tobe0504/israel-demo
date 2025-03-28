@@ -13,7 +13,7 @@ export default function SubPagesLayout() {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="payments-options"
+                name="payment-options"
                 options={{ headerShown: false }}
             />
             <Stack.Screen
