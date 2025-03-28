@@ -8,6 +8,26 @@ export default function SubPagesLayout() {
                 name="cart"
                 options={{ headerShown: false }}
             />
+            <Stack.Screen
+                name="all-products"
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="payments-options"
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="paystack"
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="products"
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="search"
+                options={{ headerShown: false }}
+            />
         </Stack>
     );
 }
