@@ -192,7 +192,7 @@ export default function RootLayout() {
           />
 
           <Stack.Screen
-            name="(sub-pages)"
+            name="(drawer)/(sub-pages)"
             options={{
               title: "sub-pages",
               header: () => <Header />,
