@@ -1,14 +1,9 @@
 import ActiveUserHeader from '@/containers/ActiveUserHeader';
 import Header from '@/containers/Header';
-import { Stack, usePathname } from 'expo-router';
-import React, { useEffect } from 'react';
+import { Stack } from 'expo-router';
+import React from 'react';
 
 export default function SubPagesLayout() {
-    const pathname = usePathname();
-
-    useEffect(() => {
-        console.log("Current route:", pathname);
-    }, [pathname]);
     return (
         <Stack>
             <Stack.Screen
