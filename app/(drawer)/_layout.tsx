@@ -6,7 +6,7 @@ import AuthContextProvider from "@/context/AuthContext";
 import AuthHeader from "@/containers/AuthHeader";
 import ActiveUserHeader from "@/containers/ActiveUserHeader";
 
-const Layout = () => {
+const DrawerLayout = () => {
   return (
     <AuthContextProvider>
       <Drawer
@@ -37,4 +37,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default DrawerLayout;
