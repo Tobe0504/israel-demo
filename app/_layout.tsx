@@ -193,10 +193,7 @@ export default function RootLayout() {
 
           <Stack.Screen
             name="(drawer)/(sub-pages)"
-            options={{
-              title: "sub-pages",
-              header: () => <Header />,
-            }}
+
           />
         </Stack>
         <Toast config={toastConfig} />

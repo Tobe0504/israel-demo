@@ -1,3 +1,4 @@
+import ActiveUserHeader from '@/containers/ActiveUserHeader';
 import { Stack } from 'expo-router';
 import React from 'react';
 
@@ -6,7 +7,9 @@ export default function SubPagesLayout() {
         <Stack>
             <Stack.Screen
                 name="cart"
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "cart" ? "Cart" : "Route"} />
+                })}
             />
             <Stack.Screen
                 name="all-products"
@@ -14,19 +17,33 @@ export default function SubPagesLayout() {
             />
             <Stack.Screen
                 name="payment-options"
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "payment-options" ? "Payments" : "Route"} />
+                })}
             />
             <Stack.Screen
                 name="paystack"
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "paystack" ? "Paystack" : "Route"} />
+                })}
             />
             <Stack.Screen
                 name="products"
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "products" ? "Products" : "Route"} />
+                })}
             />
             <Stack.Screen
                 name="search"
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "search" ? "Search " : "Route"} />
+                })}
+            />
+            <Stack.Screen
+                name="lighting-explorer"
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "lighting-explorer" ? "Explore" : "Route"} />
+                })}
             />
         </Stack>
     );

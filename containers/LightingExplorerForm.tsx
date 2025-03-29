@@ -78,7 +78,7 @@ const LightingExplorerForm = () => {
 
           <CustomButton
             onPress={() => {
-              router.push("/lighting-explorer/suggestions");
+              router.push("/suggestions");
             }}
             text="Xplore TLH Showroom"
             type="secondary"
