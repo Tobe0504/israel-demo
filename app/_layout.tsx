@@ -191,10 +191,7 @@ export default function RootLayout() {
             }}
           />
 
-          <Stack.Screen
-            name="(drawer)/(sub-pages)"
-
-          />
+          <Stack.Screen name="(drawer)/(sub-pages)" />
         </Stack>
         <Toast config={toastConfig} />
       </ThemeProvider>
