@@ -191,6 +191,11 @@ export default function RootLayout() {
             }}
           />
 
+          <Stack.Screen
+            name="(drawer)/product/[productId]"
+            options={{ header: () => <Header /> }}
+          />
+
           <Stack.Screen name="(sub-pages)" />
         </Stack>
         <Toast config={toastConfig} />
