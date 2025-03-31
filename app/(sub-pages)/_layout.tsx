@@ -35,6 +35,12 @@ export default function SubPagesLayout() {
                 })}
             />
             <Stack.Screen
+                name="product/[productId]"
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "product/[productId]" ? "Products Details" : ""} />
+                })}
+            />
+            <Stack.Screen
                 name="search"
                 options={({ route }) => ({
                     header: () => <ActiveUserHeader title={route?.name === "search" ? "Search " : ""} />
@@ -50,6 +56,12 @@ export default function SubPagesLayout() {
                 name="suggestions"
                 options={({ route }) => ({
                     header: () => <ActiveUserHeader title={route?.name === "suggestions" ? "Explore" : ""} />
+                })}
+            />
+            <Stack.Screen
+                name="category-details/[categoryId]"
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "category-details/[categoryId]" ? "Caterories" : ""} />
                 })}
             />
         </Stack>
