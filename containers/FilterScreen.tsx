@@ -88,13 +88,7 @@ const FilterScreen: React.FC = () => {
         <View style={styles.container}>
             <View style={styles.content}>
                 <View style={styles.leftPanel}>
-                    <View style={styles.searchContainer}>
-                        <TextInput
-                            style={styles.searchInput}
-                            placeholder="Filters"
-                            value={searchText}
-                            onChangeText={setSearchText}
-                        />
+                    <View style={styles.clearFilter}>
                         <TouchableOpacity style={styles.clearButton} onPress={handleClearSearch}>
                             <Text style={styles.clearText}>Clear all</Text>
                             <Ionicons name="close" size={20} color="#000" />
@@ -175,9 +169,10 @@ const styles = StyleSheet.create({
         width: 1,
         backgroundColor: '#E0E0E0',
     },
-    searchContainer: {
+    clearFilter: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'flex-end',
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderBottomWidth: 1,
