@@ -29,6 +29,12 @@ export default function SubPagesLayout() {
                 })}
             />
             <Stack.Screen
+                name="filter"
+                options={({ route }) => ({
+                    header: () => <ActiveUserHeader title={route?.name === "filter" ? "Filter" : ""} />
+                })}
+            />
+            <Stack.Screen
                 name="products"
                 options={({ route }) => ({
                     header: () => <ActiveUserHeader title={route?.name === "products" ? "Products" : ""} />
@@ -61,7 +67,7 @@ export default function SubPagesLayout() {
             <Stack.Screen
                 name="category-details/[categoryId]"
                 options={({ route }) => ({
-                    header: () => <ActiveUserHeader title={route?.name === "category-details/[categoryId]" ? "Caterories" : ""} />
+                    header: () => <ActiveUserHeader title={route?.name === "category-details/[categoryId]" ? "Categories" : ""} />
                 })}
             />
         </Stack>
