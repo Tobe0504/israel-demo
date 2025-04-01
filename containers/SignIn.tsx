@@ -41,7 +41,7 @@ const SignIn = () => {
   );
 
   // Context
-  const { handleGetuserByEmail } = useContext(AuthContext);
+  const { handleGetuserByEmail, signInWithGoogle } = useContext(AuthContext);
 
   // Requests
   const signInHandler = async () => {
@@ -152,8 +152,8 @@ const SignIn = () => {
             />
             <CustomButton
               text="Google"
-              style={{ backgroundColor: "#EA4235", flex: 1 }}
-              color="#fff"
+              style={{ backgroundColor: '#EA4235' }}
+              onPress={() => signInWithGoogle()}
             />
           </View>
         </View>
