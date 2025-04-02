@@ -22,7 +22,6 @@ WebBrowser.maybeCompleteAuthSession();
 const {
   googge_web_client: webClientId,
   google_ios_client_id: iosClientId,
-  google_android_client_id: androidClientId
 } = Constants.expoConfig?.extra || {};
 
 type AuthContextValuesTypes = {
@@ -59,7 +58,6 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
 
   // Google Auth
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId,
     iosClientId,
     webClientId,
     clientId: webClientId,
