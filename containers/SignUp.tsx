@@ -10,13 +10,16 @@ import { ThemedText } from "@/components/ThemedText";
 import CustomInput from "@/components/Input";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { inputChangeHandler } from "@/helpers/inputChangeHandler";
 import { requestHandler } from "@/helpers/requestHandler";
 import { requestType } from "@/utils/types";
 import AuthHeader from "./AuthHeader";
+import { AuthContext } from "@/context/AuthContext";
 
 const SignUp = () => {
+  const { signInWithGoogle } = useContext(AuthContext);
+
   // Utils
   const androidOrIos = Platform.OS === "ios" ? "IOS" : "Android";
 
@@ -62,7 +65,9 @@ const SignUp = () => {
         }
       },
       errorFunction(err) {
-        console.log(JSON.stringify(err?.response?.data));
+        Alert.alert("Error", (err?.response?.data as any)?.error, [
+          { text: "Okay", onPress: () => router.push("/sign-in") },
+        ]);
       },
     });
   };
@@ -140,6 +145,7 @@ const SignUp = () => {
               text="Google"
               style={{ backgroundColor: "#EA4235", flex: 1 }}
               color="#fff"
+              onPress={() => signInWithGoogle()}
             />
           </View>
         </View>

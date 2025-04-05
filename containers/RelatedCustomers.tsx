@@ -31,11 +31,8 @@ const RelatedCustomers = ({ isNotCart, data }: RelatedCustomersTypes) => {
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      successFunction(res) {
-        console.log(res?.data?.Result);
-      },
+
       errorFunction(err) {
-        console?.log(err?.response?.data);
         Alert.alert("Error", (err?.response?.data as any)?.error, [
           { text: "Okay" },
         ]);
@@ -73,7 +70,9 @@ const RelatedCustomers = ({ isNotCart, data }: RelatedCustomersTypes) => {
                   imageUrl={generateImageURL(
                     item?.ProductImage[0]?.MobileImageUrl
                   )}
-                  onPress={() => router?.push(`/product/${item?.Id}`)}
+                  onPress={() => {
+                    router?.push(`/product/${item?.Id}`);
+                  }}
                 />
               );
             }}

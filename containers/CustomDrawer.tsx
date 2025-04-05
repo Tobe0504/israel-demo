@@ -25,7 +25,7 @@ const CustomDrawer = ({ props }: any) => {
       <DrawerItem
         label="Home"
         onPress={() => {
-          router.push("/(drawer)/dashboard");
+          router.push("/dashboard");
         }}
         labelStyle={{
           fontFamily: "PoppinsRegular",
@@ -39,14 +39,14 @@ const CustomDrawer = ({ props }: any) => {
           <DrawerItem
             label="My List"
             onPress={() => {
-              router.push("/(drawer)/my-list");
+              router.push("/my-list");
             }}
           />
 
           <DrawerItem
             label="My Account"
             onPress={() => {
-              router.push("/(drawer)/my-account");
+              router.push("/my-account");
             }}
           />
         </>

@@ -6,7 +6,7 @@ import AuthContextProvider from "@/context/AuthContext";
 import AuthHeader from "@/containers/AuthHeader";
 import ActiveUserHeader from "@/containers/ActiveUserHeader";
 
-const Layout = () => {
+const DrawerLayout = () => {
   return (
     <AuthContextProvider>
       <Drawer
@@ -14,28 +14,22 @@ const Layout = () => {
         drawerContent={(props) => <CustomDrawer {...props} />}
         screenOptions={({ route }) => ({
           header: () => {
-            if (route.name === "dashboard") {
-              return <Header />;
-            } else if (route.name === "sign-in") {
+            if (route.name === "sign-in") {
               return <AuthHeader />;
             } else if (
               route.name === "my-account" ||
-              route.name === "my-list" ||
               route.name === "shipping-options"
             ) {
               return (
                 <ActiveUserHeader
                   title={
-                    route?.name === "my-list"
-                      ? "My List"
-                      : route?.name === "shipping-options"
+                    route?.name === "shipping-options"
                       ? "Shipping Options"
                       : "My Account"
                   }
                 />
               );
-            }
-            return <Header />;
+            } else return <Header />;
           },
         })}
       />
@@ -43,4 +37,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default DrawerLayout;

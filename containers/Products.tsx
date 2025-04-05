@@ -12,7 +12,7 @@ const Products = () => {
       }}
     >
       <ProductsHeader title="All Products" />
-      <ProductsListings />
+      {/* <ProductsListings /> */}
     </ScrollView>
   );
 };

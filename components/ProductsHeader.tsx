@@ -1,7 +1,8 @@
-import { ThemedText } from "@/components/ThemedText";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
+import { ThemedText } from "@/components/ThemedText";
 import { TouchableOpacity, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 type ProductsHeaderTypes = {
   title: string;
@@ -9,11 +10,9 @@ type ProductsHeaderTypes = {
   isNotFilter?: boolean;
 };
 
-const ProductsHeader = ({
-  title,
-  caption,
-  isNotFilter,
-}: ProductsHeaderTypes) => {
+const ProductsHeader = ({ title, caption, isNotFilter }: ProductsHeaderTypes) => {
+  const router = useRouter();
+
   return (
     <View
       style={{
@@ -32,7 +31,7 @@ const ProductsHeader = ({
         )}
       </View>
       {!isNotFilter && (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/filter")}>
           <MaterialCommunityIcons name="filter-outline" size={20} />
         </TouchableOpacity>
       )}

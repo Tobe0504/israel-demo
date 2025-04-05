@@ -1,40 +1,52 @@
 import Loader from "@/components/Loader";
 import ProductsHeader from "@/components/ProductsHeader";
 import ProductsListings from "@/components/ProductsListings";
+import { AuthContext } from "@/context/AuthContext";
 import { requestHandler } from "@/helpers/requestHandler";
 import useError from "@/hooks/useError";
 import { requestType } from "@/utils/types";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 
-const AllProducts = () => {
-  //   States
+const LightingExplorerProducts = () => {
+  // States
   const [requestState, setRequestState] = useState<requestType>({
     isLoading: false,
     data: null,
     error: null,
   });
-  const [pageNumber, setPageNumber] = useState(30);
 
-  // Hooks
+  // COntext
+  const { lightingData } = useContext(AuthContext);
+
+  // Router
+  const router = useRouter();
+
+  //   Hooks
   const { handleError } = useError();
 
-  const handleGetProductsByCategoryId = () => {
+  // Requests
+  const getLightingProducts = () => {
     requestHandler({
-      url: `api/⁠product/getApprovedProductsAndroid?ims=${pageNumber}`,
-      //   load: false,
-      method: "GET",
+      url: "api/product/getXplorerProducts",
+      method: "POST",
+      data: lightingData,
       state: requestState,
       setState: setRequestState,
       errorFunction(err) {
         handleError(err);
+        router.back();
       },
     });
   };
 
+  //   Effects
   useEffect(() => {
-    handleGetProductsByCategoryId();
-  }, [pageNumber]);
+    if (lightingData?.BiggerSpace) {
+      getLightingProducts();
+    }
+  }, [lightingData?.BiggerSpace]);
 
   return (
     <ScrollView
@@ -43,19 +55,22 @@ const AllProducts = () => {
         backgroundColor: "#fff",
       }}
     >
-      <ProductsHeader title="All Products" />
+      <ProductsHeader
+        title="Suggested Products for"
+        caption="Lighting Explorer"
+      />
 
-      {requestState?.isLoading && !requestState?.data ? (
+      {requestState?.isLoading ? (
         <Loader />
       ) : (
         <ProductsListings
           data={requestState?.data?.Result}
-          setPageNumber={setPageNumber}
           loading={requestState?.isLoading}
         />
       )}
+      {/* <Produc */}
     </ScrollView>
   );
 };
 
-export default AllProducts;
+export default LightingExplorerProducts;

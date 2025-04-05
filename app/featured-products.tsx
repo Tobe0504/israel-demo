@@ -1,8 +1,8 @@
 import FeaturedProducts from "@/containers/FeaturedProducts";
 import React from "react";
 
-const page = () => {
+const FeaturedProductsPage = () => {
   return <FeaturedProducts />;
 };
 
-export default page;
+export default FeaturedProductsPage;

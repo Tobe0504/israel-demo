@@ -216,8 +216,42 @@ export type cartItemType = {
 };
 
 export type productOrderType = {
-  date: Date | string;
-  price: number | string;
+  Id: number;
+  UserId: number;
+  ShippingId: number;
+  TotalPrice: number;
+  Fee: number;
+  TransactionRef: number;
+  FromCart: boolean;
+  Error: null;
+  ShippingOption: string;
+  PickupDate: string;
+  ConversionRate: string;
+  ShippingFee: number;
+  OrderWeight: number;
+  Currency: string;
+  Comment: string;
+  PaymentGateway: string;
+  Status: null;
+  TotalPricePlusFee: string;
+  OrderReference: null;
+  ReferenceCode: string;
+  PaymentTimeStamp: string;
+  TransactionStatus: string;
+  Platform: string;
+  TransactionDetails: null;
+  ShippingDetails: null;
+  ProductOrders: productOrderItemType[];
+};
+
+export type productOrderItemType = {
+  Id: number;
+  OrderRef: number;
+  ProductId: number;
+  ProductQuantity: number;
+  UnitPrice: string;
+  Price: number;
+  Product: null;
 };
 
 export type paymentMethodTypes = {
@@ -228,4 +262,25 @@ export type paymentMethodTypes = {
   IsiOSActive: boolean;
   Name: string;
   isActive: boolean;
+};
+
+export type statesType = {
+  Id: number;
+  State: string;
+  Territory: number;
+};
+
+export type dropdownOptionsType = { label: string; value: string };
+
+export type lightingDataType = {
+  BiggerSpace: null | number;
+  SmallerSpace: null | number;
+  PrimaryColor: null | number;
+  SecondaryColor: null | number;
+  FloorColor: null | number;
+  FurnitureColor: null | number;
+  SpaceHeight: null | number;
+  Area?: null | number;
+  DiningSeater?: null | number;
+  Skip?: null | number;
 };

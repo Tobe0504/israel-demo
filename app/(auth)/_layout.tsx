@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Stack } from "expo-router";
 import AuthHeader from "@/containers/AuthHeader";
 
-export class AuthStack extends Component {
+export class AuthLayout extends Component {
   render() {
     return (
       <Stack>
@@ -22,16 +22,24 @@ export class AuthStack extends Component {
           }}
         />
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name="reset-password"
           options={{
             title: "reset-password",
             header: (props) => <AuthHeader />,
           }}
-        /> */}
+        />
+
+        <Stack.Screen
+          name="reset-password/password-reset"
+          options={{
+            title: "reset-password/password-reset",
+            header: (props) => <AuthHeader />,
+          }}
+        />
       </Stack>
     );
   }
 }
 
-export default AuthStack;
+export default AuthLayout;

@@ -30,9 +30,6 @@ const ProductDetails = () => {
       errorFunction(err) {
         console.dir(err, { depth: null, colors: true });
       },
-      successFunction(res) {
-        console.log(res, "Check");
-      },
     });
   };
 

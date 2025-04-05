@@ -2,6 +2,7 @@ import CustomButton from "@/components/CustomButton";
 import Loader from "@/components/Loader";
 import ProductsHeader from "@/components/ProductsHeader";
 import { requestHandler } from "@/helpers/requestHandler";
+import useError from "@/hooks/useError";
 import { requestType } from "@/utils/types";
 import { isLoading } from "expo-font";
 import { useGlobalSearchParams } from "expo-router";
@@ -24,6 +25,9 @@ const Search = () => {
   });
   const [pageNumber, setPageNumber] = useState(1);
 
+  // Hooks
+  const { handleError } = useError();
+
   // Requests
   const handleSearchResults = () => {
     requestHandler({
@@ -32,10 +36,7 @@ const Search = () => {
       state: requestState,
       setState: setRequestState,
       errorFunction(err) {
-        console.error(err, "Check");
-      },
-      successFunction(res) {
-        console.log(res, "Check");
+        handleError(err);
       },
     });
   };

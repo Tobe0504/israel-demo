@@ -12,7 +12,7 @@ const PaystackPaymentScreen = () => {
   const { paystack_public_key }: any = Constants?.expoConfig?.extra;
 
   // Context
-  const { user } = useContext(AuthContext);
+  const { user, orderItem } = useContext(AuthContext);
 
   //   Router
   const router = useRouter();
@@ -24,7 +24,7 @@ const PaystackPaymentScreen = () => {
     <View style={{ flex: 1 }}>
       <Paystack
         paystackKey={paystack_public_key}
-        amount={5000}
+        amount={Number(orderItem.TotalPricePlusFee)}
         billingEmail={user?.Email as string}
         activityIndicatorColor="green"
         onSuccess={() => {
@@ -35,8 +35,8 @@ const PaystackPaymentScreen = () => {
           );
           router.push("/dashboard");
         }}
+        currency={orderItem?.Currency as any}
         onCancel={() => {
-          console.log("Transaction cancelled");
           showToast(
             "Payment Unsuccessful!",
             "Your Payment did not go through",

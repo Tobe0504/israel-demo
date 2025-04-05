@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { DrawerActions } from "@react-navigation/native";
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation, useRouter, useSegments } from "expo-router";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 
@@ -10,9 +10,12 @@ type ActiveUserHeaderTypes = {
 };
 
 const ActiveUserHeader = ({ title }: ActiveUserHeaderTypes) => {
-  // Router
+  // Router and Navigation
   const navigation = useNavigation();
   const router = useRouter();
+  const segments = useSegments() as string[];
+
+  const isCartPage = segments.includes("cart");
 
   return (
     <View
@@ -30,13 +33,11 @@ const ActiveUserHeader = ({ title }: ActiveUserHeaderTypes) => {
       }}
     >
       {navigation?.canGoBack() ? (
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => (navigation.canGoBack() ? navigation.goBack() : router.back())}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
+        <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
           <MaterialCommunityIcons name="menu" size={25} />
         </TouchableOpacity>
       )}
@@ -44,7 +45,14 @@ const ActiveUserHeader = ({ title }: ActiveUserHeaderTypes) => {
       <ThemedText style={{ fontSize: 20 }} type="defaultSemiBold">
         {title}
       </ThemedText>
-      <View style={{ minWidth: 16 }} />
+
+      {isCartPage ? (
+        <View style={{ minWidth: 16 }} />
+      ) : (
+        <View>
+          <Ionicons name="cart-outline" size={25} onPress={() => router.push("/cart")} />
+        </View>
+      )}
     </View>
   );
 };

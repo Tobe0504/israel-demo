@@ -7,12 +7,15 @@ import { requestHandler } from "@/helpers/requestHandler";
 import useError from "@/hooks/useError";
 import { paymentMethodTypes, requestType } from "@/utils/types";
 import { useRouter } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native";
 import { PayWithFlutterwave } from "flutterwave-react-native";
 import Constants from "expo-constants";
 import useToast from "@/hooks/useToast";
+import { AuthContext } from "@/context/AuthContext";
+import { getAsyncData } from "@/helpers/asyncStorageHandlers";
+import { LOCAL_STORAGE_BASE_CURRENCY } from "@/utils/constants";
 
 const PaymentOptions = () => {
   // States
@@ -24,6 +27,10 @@ const PaymentOptions = () => {
   const [paymentMethods, setPaymentMethods] = useState<paymentMethodTypes[]>(
     []
   );
+  const [currency, setCurrency] = useState("");
+
+  // Context
+  const { orderItem, user, setOrderItem } = useContext(AuthContext);
 
   // Env
   const { flutterwave_public_key }: any = Constants?.expoConfig?.extra;
@@ -55,6 +62,13 @@ const PaymentOptions = () => {
     [paymentMethods]
   );
 
+  const getCurrency = async () => {
+    const exchangeRate = await getAsyncData(LOCAL_STORAGE_BASE_CURRENCY);
+    const parsedExchangeRate = JSON.parse(exchangeRate as string);
+
+    setCurrency(parsedExchangeRate?.Currency);
+  };
+
   //   Efffects
   useEffect(() => {
     if (requestState?.data) {
@@ -67,8 +81,21 @@ const PaymentOptions = () => {
   }, [requestState?.data]);
 
   useEffect(() => {
+    getCurrency();
     getPaymentProviders();
   }, []);
+
+  useEffect(() => {
+    if (activePaymentMethod) {
+      setOrderItem((prevState) => {
+        return {
+          ...prevState,
+          PaymentGateway: activePaymentMethod?.Name,
+          Currency: currency,
+        };
+      });
+    }
+  }, [activePaymentMethod]);
 
   return (
     <View style={{ padding: 32, backgroundColor: "#fff", flex: 1 }}>
@@ -132,16 +159,25 @@ const PaymentOptions = () => {
               "error"
             );
           }}
+          onAbort={() => {
+            showToast(
+              "Payment Cancelled!",
+              "Your Payment did not go through",
+              "error"
+            );
+          }}
           options={{
-            amount: 1000,
+            amount: Number(orderItem?.TotalPricePlusFee) || 200,
             authorization: flutterwave_public_key,
             tx_ref: "1234",
-            payment_options: "card",
+            payment_options:
+              "card,account,ussd,banktransfer,mpesa,barter,qr,bank",
             customer: {
-              email: "example@example.com",
-              phonenumber: "08012345678",
-              name: "Takeshi Kovacs",
+              email: user?.Email as string,
+              phonenumber: user?.PhoneNumber,
+              name: user?.Name,
             },
+            currency: orderItem?.Currency as any,
           }}
           customButton={(props) => (
             <CustomButton

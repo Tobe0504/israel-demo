@@ -1,14 +1,14 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 
-const PasswordReset = () => {
+const LightingLayout = () => {
   return (
     <ThemeProvider value={DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen
-          name="success"
+          name="products"
           options={{
-            title: "success",
+            title: "Products",
             headerShown: false,
           }}
         />
@@ -17,4 +17,4 @@ const PasswordReset = () => {
   );
 };
 
-export default PasswordReset;
+export default LightingLayout;
