@@ -152,7 +152,7 @@ const SignIn = () => {
             />
             <CustomButton
               text="Google"
-              style={{ backgroundColor: '#EA4235' }}
+              style={{ backgroundColor: "#EA4235" }}
               onPress={() => signInWithGoogle()}
             />
           </View>

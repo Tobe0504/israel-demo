@@ -1,3 +1,4 @@
+import AuthHeader from "@/containers/AuthHeader";
 import Header from "@/containers/Header";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
@@ -11,15 +12,15 @@ const ResetLayout = () => {
           name="database-success"
           options={{
             title: "Database Success",
-            headerShown: false,
+            header: () => <AuthHeader />,
           }}
         />
 
         <Stack.Screen
           name="database-failure"
           options={{
-            headerShown: false,
             title: "Database Failure",
+            header: () => <AuthHeader />,
           }}
         />
       </Stack>

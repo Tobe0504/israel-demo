@@ -22,13 +22,13 @@ export class AuthStack extends Component {
           }}
         />
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="reset-password"
           options={{
             title: "reset-password",
             header: (props) => <AuthHeader />,
           }}
-        />
+        /> */}
       </Stack>
     );
   }

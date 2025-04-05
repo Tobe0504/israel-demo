@@ -36,11 +36,7 @@ const MyList = () => {
       state: requestState,
       setState: setRequestState,
       errorFunction(err) {
-        console.log(err?.response?.data, 10000);
         handleError(err);
-      },
-      successFunction(res) {
-        console.log(res?.data?.Result, "Chec");
       },
     });
   };
@@ -56,7 +52,6 @@ const MyList = () => {
       state: deleteRequestState,
       setState: setDeleteRequestState,
       errorFunction(err) {
-        console.log(err?.response?.data, 10000);
         handleError(err);
       },
       successFunction(res) {

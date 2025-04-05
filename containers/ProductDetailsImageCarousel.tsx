@@ -26,8 +26,6 @@ const ProductDetailsImageCarousel = ({
     setActiveIndex(index);
   };
 
-  console.log(data, "Checkkk");
-
   return (
     <View>
       <ThemedText type="subtitle" style={{ marginBottom: 16 }}>

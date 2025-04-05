@@ -12,7 +12,6 @@ export const getAsyncData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);
     if (value !== null) {
-      console.log("Retrieved value:", value);
       return value;
     }
   } catch (e) {
@@ -23,7 +22,6 @@ export const getAsyncData = async (key: string) => {
 export const removeAsyncData = async (key: string) => {
   try {
     await AsyncStorage.removeItem(key);
-    console.log(`Removed value for key: ${key}`);
   } catch (e) {
     console.error("Error removing data", e);
   }

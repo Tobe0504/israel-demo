@@ -18,15 +18,12 @@ const DrawerLayout = () => {
               return <AuthHeader />;
             } else if (
               route.name === "my-account" ||
-              route.name === "my-list" ||
               route.name === "shipping-options"
             ) {
               return (
                 <ActiveUserHeader
                   title={
-                    route?.name === "my-list"
-                      ? "My List"
-                      : route?.name === "shipping-options"
+                    route?.name === "shipping-options"
                       ? "Shipping Options"
                       : "My Account"
                   }

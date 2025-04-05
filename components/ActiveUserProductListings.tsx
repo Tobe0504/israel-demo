@@ -16,12 +16,11 @@ const ActiveUserProductListings = ({
   onDelete,
   loading,
 }: ActiveUserProductListingsType) => {
-  return data?.length > 0 && !loading ? (
+  return data?.length > 0 ? (
     <FlatList
       data={data}
       keyExtractor={(item) => String(item?.Id)}
       renderItem={({ item }) => {
-        console.log(item?.ProductImage);
         return (
           <ProductCard data={item} loading={loading} onDelete={onDelete} />
         );

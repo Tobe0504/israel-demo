@@ -63,9 +63,6 @@ export default function RootLayout() {
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      errorFunction(err) {
-        console.log(err?.response?.data, 10000);
-      },
       successFunction(res) {
         const latestVersion = res?.data.iOSVersion;
         const currentVersion = Application.nativeApplicationVersion || "0.0.0";
@@ -93,9 +90,7 @@ export default function RootLayout() {
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      errorFunction(err) {
-        console.log(err?.response?.data);
-      },
+      errorFunction(err) {},
       successFunction(res) {
         getUserIpWithCountryCode(res?.data);
       },
@@ -103,15 +98,11 @@ export default function RootLayout() {
   };
 
   const getUserIpWithCountryCode = (ip: string) => {
-    console.log(ip, "STROING");
     requestHandler({
       url: `http://ip-api.com/json/${ip}?fields=status,message,countryCode,currency,query`,
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      errorFunction(err) {
-        console.log(err?.response, "ERRRRR");
-      },
       successFunction(res) {
         getCountryCode(res?.data?.currency);
       },
@@ -124,9 +115,7 @@ export default function RootLayout() {
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      errorFunction(err) {
-        console.log(err?.response, "ERRRRR");
-      },
+
       successFunction(res) {
         const currencyObject = res?.data?.Result?.find(
           (data: {

@@ -15,7 +15,7 @@ import { inputChangeHandler } from "@/helpers/inputChangeHandler";
 import { requestHandler } from "@/helpers/requestHandler";
 import { requestType } from "@/utils/types";
 import AuthHeader from "./AuthHeader";
-import { AuthContext } from '@/context/AuthContext';
+import { AuthContext } from "@/context/AuthContext";
 
 const SignUp = () => {
   const { signInWithGoogle } = useContext(AuthContext);
@@ -65,7 +65,9 @@ const SignUp = () => {
         }
       },
       errorFunction(err) {
-        console.log(JSON.stringify(err?.response?.data));
+        Alert.alert("Error", (err?.response?.data as any)?.error, [
+          { text: "Okay", onPress: () => router.push("/sign-in") },
+        ]);
       },
     });
   };

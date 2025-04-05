@@ -1,4 +1,3 @@
-import products from "@/app/products";
 import CategoriesCard from "@/components/CategoriesCard";
 import CustomButton from "@/components/CustomButton";
 import { generateImageURL } from "@/helpers/generateImageURL";
@@ -6,7 +5,7 @@ import usePrice from "@/hooks/usePrice";
 import { productType } from "@/utils/types";
 import { useRouter } from "expo-router";
 import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { View, ViewComponent, ViewProps } from "react-native";
+import { SafeAreaView, View, ViewComponent, ViewProps } from "react-native";
 import { FlatList } from "react-native";
 import { ThemedText } from "./ThemedText";
 
@@ -25,7 +24,7 @@ const ProductsListings = ({
   const router = useRouter();
 
   return (
-    <View>
+    <>
       {data?.length > 0 ? (
         <FlatList
           data={data}
@@ -79,7 +78,7 @@ const ProductsListings = ({
         }}
         loading={loading}
       />
-    </View>
+    </>
   );
 };
 

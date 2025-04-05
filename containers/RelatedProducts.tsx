@@ -31,9 +31,6 @@ const RelatedProducts = ({ isNotCart, data }: RelatedProductsTypes) => {
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      successFunction(res) {
-        console.log(res?.data?.Result);
-      },
       errorFunction(err) {
         console?.log(err?.response?.data);
         Alert.alert("Error", (err?.response?.data as any)?.error, [
@@ -49,8 +46,6 @@ const RelatedProducts = ({ isNotCart, data }: RelatedProductsTypes) => {
       handleGetRelatedProducts();
     }
   }, [data]);
-
-  console.log(requestState?.data, "Dataa");
 
   return (
     <View style={[!isNotCart && { marginHorizontal: 16, paddingVertical: 16 }]}>

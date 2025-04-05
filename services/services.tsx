@@ -1,4 +1,5 @@
 import axiosInstance from ".";
+
 import {
   productCategoriesRequestDataType,
   productType,

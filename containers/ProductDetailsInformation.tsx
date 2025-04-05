@@ -42,7 +42,7 @@ const ProductDetailsInformation = ({
 
   // Hooks
   const { handleError } = useError();
-  const { returnExchangeRatedPrice } = usePrice();
+  const { returnExchangeRatedPrice, returnExchangeRateValueOnly } = usePrice();
   const { showToast } = useToast();
 
   const addToListHandler = () => {
@@ -63,7 +63,6 @@ const ProductDetailsInformation = ({
         });
       },
       errorFunction(err) {
-        console.log(err?.response?.data, "Error");
         handleError(err);
       },
     });
@@ -87,7 +86,6 @@ const ProductDetailsInformation = ({
         });
       },
       errorFunction(err) {
-        console.log(err?.response?.data, "Error");
         handleError(err);
       },
     });
@@ -110,9 +108,26 @@ const ProductDetailsInformation = ({
   };
 
   const getPriceWithQty = async (price: string | number) => {
-    const priceValue = await returnExchangeRatedPrice(price);
+    const priceValue = await returnExchangeRateValueOnly(price);
 
     setPriceWIthQuantity(priceValue as string);
+    setOrderItem((prevState) => {
+      return {
+        ...prevState,
+        TotalPrice: Number(data?.Price * quantity),
+        ProductOrders: [
+          {
+            Id: data?.Id,
+            OrderRef: 0,
+            ProductId: data?.Id,
+            ProductQuantity: 1,
+            UnitPrice: String(price),
+            Price: price as any,
+            Product: null,
+          },
+        ],
+      };
+    });
   };
 
   // Effects
@@ -218,8 +233,8 @@ const ProductDetailsInformation = ({
         <ThemedText style={{ marginBottom: 8 }}>
           <ThemedText style={{ fontFamily: "PoppinsSemiBold" }}>
             Product Type:
-          </ThemedText>
-          The Text
+          </ThemedText>{" "}
+          {data?.ProductType?.Name}
         </ThemedText>
 
         <ThemedText style={{ marginBottom: 8 }}>
@@ -395,7 +410,7 @@ const ProductDetailsInformation = ({
         }}
       />
       <CustomButton
-        text={`Buy Now (${priceWithQuantity})`}
+        text={`Buy Now (₦${formatCurrency(priceWithQuantity)})`}
         style={{ marginBottom: 16 }}
         onPress={() => router.push("/shipping-options")}
       />

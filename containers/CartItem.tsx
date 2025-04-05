@@ -7,16 +7,24 @@ import { generateImageURL } from "@/helpers/generateImageURL";
 import { requestHandler } from "@/helpers/requestHandler";
 import useError from "@/hooks/useError";
 import usePrice from "@/hooks/usePrice";
+import useToast from "@/hooks/useToast";
 import { cartItemType, productType, requestType } from "@/utils/types";
-import { useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Button, Image, TextInput, View } from "react-native";
 
 type CartItemType = {
   data: cartItemType;
   request?: () => void;
+  setState?: Dispatch<SetStateAction<cartItemType[]>>;
 };
 
-const CartItem = ({ data, request }: CartItemType) => {
+const CartItem = ({ data, request, setState }: CartItemType) => {
   // States
   const [requestState, setRequestState] = useState<requestType>({
     isLoading: false,
@@ -37,6 +45,7 @@ const CartItem = ({ data, request }: CartItemType) => {
   //   Hooks
   const { handleError } = useError();
   const { returnExchangeRatedPrice } = usePrice();
+  const { showToast } = useToast();
 
   // Utils
   const getPrice = async (price: string | number) => {
@@ -52,9 +61,6 @@ const CartItem = ({ data, request }: CartItemType) => {
       method: "GET",
       state: requestState,
       setState: setRequestState,
-      errorFunction(err) {
-        console.log(err?.response?.data);
-      },
     });
   };
 
@@ -69,12 +75,9 @@ const CartItem = ({ data, request }: CartItemType) => {
       state: deleteRequestState,
       setState: setDeleteRequestState,
       errorFunction(err) {
-        console.log(err?.response?.data);
         handleError(err);
       },
-      successFunction(res) {
-        console.log(res?.data, "Check");
-
+      successFunction() {
         if (request) {
           request();
         }
@@ -167,6 +170,21 @@ const CartItem = ({ data, request }: CartItemType) => {
                   if (quantity > 1) {
                     setQuantity((prevState) => prevState - 1);
                   }
+                  if (setState) {
+                    setState((prevState) => {
+                      const updatedState = [...prevState];
+
+                      const selectedItem = updatedState?.findIndex(
+                        (findData) => findData?.Id === data?.Id
+                      );
+
+                      if (selectedItem !== -1) {
+                        updatedState.splice(selectedItem, 1);
+                      }
+
+                      return updatedState;
+                    });
+                  }
                 }}
               />
             </View>
@@ -195,10 +213,21 @@ const CartItem = ({ data, request }: CartItemType) => {
                 color="#fff"
                 onPress={() => {
                   if (
-                    quantity <=
+                    quantity <
                     Number(requestState?.data?.SingleResult?.QuantityInStock)
                   ) {
                     setQuantity((prevState) => prevState + 1);
+                    if (setState) {
+                      setState((prevState) => {
+                        return [...prevState, data];
+                      });
+                    }
+                  } else {
+                    showToast(
+                      "Exceeded available stock",
+                      `There are only ${requestState?.data?.SingleResult?.QuantityInStock} items available for purchase`,
+                      "error"
+                    );
                   }
                 }}
               />
