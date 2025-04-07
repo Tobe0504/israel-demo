@@ -9,7 +9,15 @@
       "paystack_public_key": "pk_test_df60e0bbfa70181a3a3ea3efa256954a35b5a5db",
       "flutterwave_public_key": "FLWPUBK_TEST-fcec4a596a3168885228ce0b43d4f47a-X",
       "googge_web_client": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com",
-      "google_ios_client_id": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com"
+      "google_ios_client_id": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com",
+      "facebook_application_id": "664429779429555",
+      "fb_login_protocol_scheme": "fb664429779429555",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2d8ac5f5-b417-4f2a-9ac1-df5a64569548"
+      }
     },
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,7 +27,17 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Lightinghaus"
+      "bundleIdentifier": "com.anonymous.Lightinghaus",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["fb664429779429555"] 
+          }
+        ],
+        "FacebookAppID": "664429779429555",
+        "FacebookDisplayName": "Lightinghaus",
+        "LSApplicationQueriesSchemes": ["fbapi", "fb-messenger-share-api", "fbauth2"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -47,6 +65,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "owner": "kizitech"
   }
 }

@@ -41,7 +41,7 @@ const SignIn = () => {
   );
 
   // Context
-  const { handleGetuserByEmail, signInWithGoogle } = useContext(AuthContext);
+  const { handleGetuserByEmail, signInWithGoogle, signInWithFacebook } = useContext(AuthContext);
 
   // Requests
   const signInHandler = async () => {
@@ -149,6 +149,7 @@ const SignIn = () => {
               text="Facebook"
               style={{ backgroundColor: "#4267B2", flex: 1 }}
               color="#fff"
+              onPress={() => signInWithFacebook()}
             />
             <CustomButton
               text="Google"

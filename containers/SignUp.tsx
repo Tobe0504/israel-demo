@@ -18,7 +18,7 @@ import AuthHeader from "./AuthHeader";
 import { AuthContext } from "@/context/AuthContext";
 
 const SignUp = () => {
-  const { signInWithGoogle } = useContext(AuthContext);
+  const { signInWithGoogle, signInWithFacebook } = useContext(AuthContext);
 
   // Utils
   const androidOrIos = Platform.OS === "ios" ? "IOS" : "Android";
@@ -140,6 +140,7 @@ const SignUp = () => {
               text="Facebook"
               style={{ backgroundColor: "#4267B2", flex: 1 }}
               color="#fff"
+              onPress={() => signInWithFacebook()}
             />
             <CustomButton
               text="Google"
