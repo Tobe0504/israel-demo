@@ -66,8 +66,16 @@ const PaymentOptions = () => {
     const exchangeRate = await getAsyncData(LOCAL_STORAGE_BASE_CURRENCY);
     const parsedExchangeRate = JSON.parse(exchangeRate as string);
 
-    setCurrency(parsedExchangeRate?.Currency);
+    setOrderItem((prevState) => {
+      return {
+        ...prevState,
+        ConversionRate: parsedExchangeRate?.Value,
+        Currency: parsedExchangeRate?.Currency,
+      };
+    });
   };
+
+  console.log(orderItem, "order");
 
   //   Efffects
   useEffect(() => {
@@ -91,7 +99,6 @@ const PaymentOptions = () => {
         return {
           ...prevState,
           PaymentGateway: activePaymentMethod?.Name,
-          Currency: currency,
         };
       });
     }
@@ -202,6 +209,22 @@ const PaymentOptions = () => {
             if (activePaymentMethod) {
               if (activePaymentMethod?.Name === "Paystack") {
                 router.push("/paystack");
+              }
+            }
+          }}
+        />
+      )}
+
+      {(activePaymentMethod as paymentMethodTypes)?.Name?.toLowerCase() ===
+        "interswitch" && (
+        <CustomButton
+          text="Proceed with Interswitch"
+          type="secondary"
+          disabled={!activePaymentMethod}
+          onPress={() => {
+            if (activePaymentMethod) {
+              if (activePaymentMethod?.Name === "Interswitch") {
+                router.push("/interswitch");
               }
             }
           }}

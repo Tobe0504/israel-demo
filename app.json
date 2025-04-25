@@ -9,29 +9,52 @@
       "paystack_public_key": "pk_test_df60e0bbfa70181a3a3ea3efa256954a35b5a5db",
       "flutterwave_public_key": "FLWPUBK_TEST-fcec4a596a3168885228ce0b43d4f47a-X",
       "googge_web_client": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com",
-      "google_ios_client_id": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com"
+      "google_ios_client_id": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com",
+      "facebook_app_id": "664429779429555",
+      "facebook_scheme": "fb664429779429555",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c302cb72-13fd-42c6-97e2-fdb38a4e77c1"
+      }
     },
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Lightinghaus"
+      "bundleIdentifier": "com.anonymous.Lightinghaus",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.thelightinghaus.tlh"
+      "package": "com.thelightinghaus.tlh",
+      "permissions": [
+        "android.permission.INTERNET",
+        "com.google.android.gms.permission.AD_ID"
+      ]
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/logo.png"
     },
     "plugins": [
       "expo-router",
@@ -43,7 +66,22 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-font"
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "664429779429555",
+          "clientToken": "test",
+          "displayName": "Log into The LightingHaus with Facebook",
+          "scheme": "fb664429779429555",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true,
+          "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
+      "expo-font",
+      "react-native-fbsdk-next",
+      "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true

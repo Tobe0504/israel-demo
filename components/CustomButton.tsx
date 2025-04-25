@@ -12,7 +12,7 @@ import { ViewStyle } from "react-native";
 type CustomButtonTypes = {
   onPress?: () => void;
   text: string;
-  type?: "primary" | "secondary" | "null" | "delete";
+  type?: "primary" | "secondary" | "null" | "delete" | "white";
   icon?: any;
   style?: ViewStyle;
   color?: string;
@@ -41,6 +41,8 @@ export default function CustomButton({
           ? styles?.null
           : type === "delete"
           ? styles?.delete
+          : type === "white"
+          ? styles.white
           : styles.primary,
         { ...style },
       ]}
@@ -60,6 +62,8 @@ export default function CustomButton({
                 ? styles.nullText
                 : type === "delete"
                 ? styles?.deleteText
+                : type === "white"
+                ? styles.white
                 : styles.buttonText,
             ]}
           >
@@ -98,6 +102,11 @@ const styles = StyleSheet.create({
 
   primary: {
     backgroundColor: "#FFCA05",
+    color: "#000",
+  },
+
+  white: {
+    backgroundColor: "#fff",
     color: "#000",
   },
 

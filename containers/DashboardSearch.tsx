@@ -39,7 +39,9 @@ const DashboardSearch = () => {
         }}
         onChangeText={setSearch}
         onSubmitEditing={() => {
-          router.push(`/search?search=${encodeURIComponent(search)}`);
+          if (search?.trim()) {
+            router.push(`/search?search=${encodeURIComponent(search)}`);
+          }
         }}
         returnKeyType="search"
       />
@@ -50,7 +52,7 @@ const DashboardSearch = () => {
           position: "absolute",
           left: 24,
           top: "50%",
-          transform: [{ translateX: -10 }, { translateY: -10 }],
+          transform: [{ translateX: 0 }, { translateY: -10 }],
         }}
       />
     </View>

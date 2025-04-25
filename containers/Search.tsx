@@ -67,19 +67,9 @@ const Search = () => {
             <Loader />
           ) : (
             <>
-              <SearchProducts data={requestState?.data?.Result} />
-              <CustomButton
-                text="Load more"
-                type="null"
-                style={{ marginVertical: 16 }}
-                loading={requestState?.isLoading}
-                onPress={() => {
-                  if (!requestState?.data?.Result?.length) {
-                    setPageNumber(1);
-                  } else {
-                    setPageNumber((prevState) => prevState + 1);
-                  }
-                }}
+              <SearchProducts
+                data={requestState?.data?.Result}
+                setPageNumber={setPageNumber}
               />
             </>
           )}

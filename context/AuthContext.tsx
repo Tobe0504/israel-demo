@@ -2,6 +2,7 @@ import { getAsyncData, storeAsyncData } from "@/helpers/asyncStorageHandlers";
 import { requestHandler } from "@/helpers/requestHandler";
 import { LOCAL_STORAGE_AUTH_USER_EMAIL } from "@/utils/constants";
 import {
+  filterContextType,
   lightingDataType,
   productOrderType,
   requestType,
@@ -23,6 +24,15 @@ import {
 } from "expo-auth-session";
 import Constants from "expo-constants";
 import { Alert } from "react-native";
+import useError from "@/hooks/useError";
+import { useRouter } from "expo-router";
+// import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
+// import {
+//   AccessToken,
+//   Settings,
+//   Profile,
+//   LoginManager,
+// } from "react-native-fbsdk-next";
 
 // Initialize WebBrowser
 WebBrowser.maybeCompleteAuthSession();
@@ -40,6 +50,11 @@ type AuthContextValuesTypes = {
   googleAuthLoading: boolean;
   lightingData: lightingDataType;
   setLightingData: Dispatch<SetStateAction<lightingDataType>>;
+  orderItemHandler: () => void;
+  orderItemState: requestType;
+  productsFilterData: filterContextType;
+  setProductsFilterData: Dispatch<SetStateAction<filterContextType>>;
+  // handleFacebookAuth: () => void;
 };
 
 type AuthContextProviderTypes = {
@@ -89,8 +104,6 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
     ShippingDetails: null,
     ProductOrders: [],
   });
-
-  // States
   const [lightingData, setLightingData] = useState<lightingDataType>({
     BiggerSpace: null,
     SmallerSpace: null,
@@ -103,52 +116,30 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
     DiningSeater: null,
     Skip: null,
   });
-
-  const orderItemHandler = () => [
-    requestHandler({
-      url: "api/order/insertNewTransaction",
-      method: "POST",
-      state: orderItemState,
-      setState: setOrderItemState,
-      successFunction(res) {
-        setOrderItem({
-          Id: 0,
-          UserId: 0,
-          ShippingId: 0,
-          TotalPrice: 0,
-          Fee: 0,
-          TransactionRef: 0,
-          FromCart: false,
-          Error: null,
-          ShippingOption: "Pickup",
-          PickupDate: "",
-          ConversionRate: "",
-          ShippingFee: 0,
-          OrderWeight: 0,
-          Currency: "",
-          Comment: "",
-          PaymentGateway: "",
-          Status: null,
-          TotalPricePlusFee: "",
-          OrderReference: null,
-          ReferenceCode: "",
-          PaymentTimeStamp: "",
-          TransactionStatus: "",
-          Platform: "ios",
-          TransactionDetails: null,
-          ShippingDetails: null,
-          ProductOrders: [],
-        });
-      },
-    }),
-  ];
-
-  console.log(user, "User");
+  const [productsFilterData, setProductsFilterData] =
+    useState<filterContextType>({
+      ProductTypes: "",
+      DesignTypes: "",
+      SpaceType: "",
+      ColorTypes: "",
+      HeightTypes: "",
+      MaximumPrice: 0,
+      MinimumPrice: 0,
+      SpaceID: 0,
+      IsFeatured: false,
+      Skip: 70,
+    });
 
   const [userSignInDetailsFormData, setUserSignInDetailsFormData] = useState(
     new URLSearchParams()
   );
   const [googleAuthLoading, setGoogleAuthLoading] = useState(false);
+
+  // Hooks
+  const { handleError } = useError();
+
+  // Router
+  const router = useRouter();
 
   // Google Auth
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -180,7 +171,6 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
   const handleGoogleAuth = async (accessToken: string) => {
     setGoogleAuthLoading(true);
     try {
-      // Get user info from Google
       const userInfoResponse = await fetch(
         "https://www.googleapis.com/userinfo/v2/me",
         {
@@ -222,6 +212,32 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
     }
   };
 
+  // Facebook Auth
+  // const handleFacebookAuth = () => {
+  //   LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+  //     function (result) {
+  //       if (result.isCancelled) {
+  //         console.log("==> Login cancelled");
+  //       } else {
+  //         console.log(result);
+  //         AccessToken.getCurrentAccessToken().then((data) => {
+  //           console.log(data);
+  //           getUserFBData();
+  //         });
+  //       }
+  //     },
+  //     function (error) {
+  //       console.log("==> Login fail with error: " + error);
+  //     }
+  //   );
+  // };
+
+  // const getUserFBData = () => {
+  //   Profile.getCurrentProfile().then((currentProfile) => {
+  //     console.log(currentProfile);
+  //   });
+  // };
+
   // Requests
   const handleGetuserByEmail = (email: string) => {
     requestHandler({
@@ -248,7 +264,18 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
       successFunction(res) {
         const email = userSignInDetailsFormData.get("username");
         if (email) {
-          handleGetuserByEmail(email);
+          const fetchStoredEmail = async () => {
+            try {
+              const data = await getAsyncData(LOCAL_STORAGE_AUTH_USER_EMAIL);
+              if (data) {
+                handleGetuserByEmail(data as string);
+              }
+            } catch (error) {
+              console.error("Error fetching email:", error);
+            }
+          };
+
+          fetchStoredEmail();
           storeAsyncData(LOCAL_STORAGE_AUTH_USER_EMAIL, email);
         }
       },
@@ -257,6 +284,52 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
       },
     });
   };
+
+  const orderItemHandler = () => [
+    requestHandler({
+      url: "api/order/insertNewTransaction",
+      data: orderItem,
+      method: "POST",
+      state: orderItemState,
+      setState: setOrderItemState,
+      successFunction(res) {
+        // console.log(res, "Order success");
+        router.push("/order-success");
+        setOrderItem({
+          Id: 0,
+          UserId: 0,
+          ShippingId: 0,
+          TotalPrice: 0,
+          Fee: 0,
+          TransactionRef: 0,
+          FromCart: false,
+          Error: null,
+          ShippingOption: "Pickup",
+          PickupDate: "",
+          ConversionRate: "",
+          ShippingFee: 0,
+          OrderWeight: 0,
+          Currency: "",
+          Comment: "",
+          PaymentGateway: "",
+          Status: null,
+          TotalPricePlusFee: "",
+          OrderReference: null,
+          ReferenceCode: "",
+          PaymentTimeStamp: "",
+          TransactionStatus: "",
+          Platform: "ios",
+          TransactionDetails: null,
+          ShippingDetails: null,
+          ProductOrders: [],
+        });
+      },
+      errorFunction(err) {
+        handleError(err);
+        console.log(err?.response, "Order failed");
+      },
+    }),
+  ];
 
   useEffect(() => {
     const fetchStoredEmail = async () => {
@@ -271,6 +344,18 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
     };
 
     fetchStoredEmail();
+
+    // const requestTracking = async () => {
+    //   const { status } = await requestTrackingPermissionsAsync();
+
+    //   Settings.initializeSDK();
+
+    //   if (status === "granted") {
+    //     await Settings.setAdvertiserTrackingEnabled(true);
+    //   }
+    // };
+
+    // requestTracking();
   }, []);
 
   return (
@@ -284,6 +369,11 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
         googleAuthLoading,
         lightingData,
         setLightingData,
+        orderItemHandler,
+        orderItemState,
+        productsFilterData,
+        setProductsFilterData,
+        // handleFacebookAuth,
       }}
     >
       {children}

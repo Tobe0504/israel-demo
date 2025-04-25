@@ -37,7 +37,7 @@ const Cart = () => {
   const { handleError } = useError();
 
   // Requests
-  const getCartItems = () => {
+  const getCartItems = (load: boolean) => {
     requestHandler({
       url: `api/cart/getUserCart`,
       data: { UserId: user?.Id },
@@ -50,6 +50,7 @@ const Cart = () => {
       successFunction(res) {
         setCartItems(res?.data?.Result);
       },
+      load,
     });
   };
 
@@ -68,9 +69,11 @@ const Cart = () => {
 
   // Effects
   useEffect(() => {
-    getCartItems();
-    getRelatedProducts();
-  }, []);
+    if (user) {
+      getCartItems(true);
+      getRelatedProducts();
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchPricesAndConvert = async () => {

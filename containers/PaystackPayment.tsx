@@ -6,13 +6,15 @@ import useError from "@/hooks/useError";
 import useToast from "@/hooks/useToast";
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
+import { getTodaysDate } from "@/helpers/datehandlers";
 
 const PaystackPaymentScreen = () => {
   // Env
   const { paystack_public_key }: any = Constants?.expoConfig?.extra;
 
   // Context
-  const { user, orderItem } = useContext(AuthContext);
+  const { user, orderItem, orderItemHandler, setOrderItem } =
+    useContext(AuthContext);
 
   //   Router
   const router = useRouter();
@@ -27,13 +29,22 @@ const PaystackPaymentScreen = () => {
         amount={Number(orderItem.TotalPricePlusFee)}
         billingEmail={user?.Email as string}
         activityIndicatorColor="green"
-        onSuccess={() => {
+        onSuccess={(res) => {
+          console.log(res, "The paystack response");
+          setOrderItem((prevstate) => {
+            return {
+              ...prevstate,
+              TransactionRef: res?.data?.transactionRef?.reference,
+              PaymentTimeStamp: getTodaysDate(),
+              TransactionStatus: res?.data?.event,
+            };
+          });
           showToast(
             "Payment Successful!",
             "Your Payment was made successfully",
             "success"
           );
-          router.push("/dashboard");
+          orderItemHandler();
         }}
         currency={orderItem?.Currency as any}
         onCancel={() => {

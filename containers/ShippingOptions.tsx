@@ -16,10 +16,13 @@ import usePrice from "@/hooks/usePrice";
 import { formatCurrency } from "@/helpers/formatAmount";
 import useError from "@/hooks/useError";
 
+// Constants
+const shippingOptions = ["In-Store Pickup", "DHL"];
+
 const ShippingOptions = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [page, setPage] = useState("pickup");
+  const [page, setPage] = useState("pickupOption");
   const [orderDetails, setOrderDetails] = useState({
     fullName: "",
     address: "",
@@ -36,23 +39,43 @@ const ShippingOptions = () => {
     data: null,
     error: null,
   });
+  const [
+    updateShippingAddressRequestState,
+    setUpdateShippingAddressRequestState,
+  ] = useState<requestType>({
+    isLoading: false,
+    data: null,
+    error: null,
+  });
   const [price, setPrice] = useState("");
   const [priceWithoutCurrency, setPriceWithoutCurrency] = useState(0);
   const [addedPriceWithFee, setAddedPriceWithFee] = useState(0);
+  const [state, setState] = useState("");
 
   // Context
-  const { orderItem, setOrderItem, user } = useContext(AuthContext);
-
-  const [state, setState] = useState("");
+  const { orderItem, setOrderItem, user, handleGetuserByEmail } =
+    useContext(AuthContext);
 
   //   Router
   const router = useRouter();
 
   // Hooks
   const { handleError } = useError();
-
-  // Hooks
   const { returnExchangeRatedPrice, returnExchangeRateValueOnly } = usePrice();
+
+  // Memos
+  const userDetailsAreDifferent = useMemo(() => {
+    if (
+      user?.Name === orderDetails?.fullName &&
+      user?.Email === orderDetails?.email &&
+      user?.PhoneNumber === orderDetails?.phone &&
+      user?.Address === orderDetails?.address
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }, [orderDetails, user]);
 
   // Requests
   const getShippingOptionsStates = () => {
@@ -76,6 +99,28 @@ const ShippingOptions = () => {
     });
   };
 
+  const updateuserShippingAddressHandler = () => {
+    requestHandler({
+      url: "/api/shippingAddress/insertShippingAddress",
+      method: "POST",
+      data: {
+        Id: user?.Id,
+        PhoneNumber: orderDetails?.phone,
+        Name: orderDetails?.fullName,
+        Address: orderDetails?.address,
+      },
+      state: updateShippingAddressRequestState,
+      setState: setUpdateShippingAddressRequestState,
+      requestCleanup: true,
+      successFunction() {
+        router.push("/payment-options");
+      },
+      errorFunction(err) {
+        handleError(err);
+      },
+    });
+  };
+
   // Utils
   const onChange = (selectedDate: any) => {
     setShow(false);
@@ -96,8 +141,6 @@ const ShippingOptions = () => {
 
     setPriceWithoutCurrency(priceValue as number);
   };
-
-  //   Context
 
   // Effects
   useEffect(() => {
@@ -156,6 +199,21 @@ const ShippingOptions = () => {
             ...prevState,
             TotalPricePlusFee: addedValue,
             ShippingFee: shippingFee?.data?.SingleResult?.ShippingFee,
+            Fee: shippingFee?.data?.SingleResult?.ShippingFee,
+          };
+        });
+      }
+    } else {
+      const addedValue = priceWithoutCurrency;
+
+      setAddedPriceWithFee(addedValue);
+
+      if (addedValue) {
+        setOrderItem((prevState) => {
+          return {
+            ...prevState,
+            TotalPricePlusFee: addedValue as any,
+            ShippingFee: 0,
           };
         });
       }
@@ -208,6 +266,30 @@ const ShippingOptions = () => {
             </View>
           )}
         </>
+      ) : page === "pickupOption" ? (
+        <>
+          <View style={{ gap: 10 }}>
+            {shippingOptions?.map((data) => {
+              return (
+                <CustomButton
+                  key={data}
+                  text={data}
+                  type="secondary"
+                  onPress={() => {
+                    setOrderItem((prevState) => {
+                      return { ...prevState, ShippingOption: data };
+                    });
+                    if (data?.toLowerCase() === "dhl") {
+                      setPage("pickup");
+                    } else {
+                      setPage("user");
+                    }
+                  }}
+                />
+              );
+            })}
+          </View>
+        </>
       ) : (
         <View>
           <TouchableWithoutFeedback
@@ -248,14 +330,18 @@ const ShippingOptions = () => {
                 }}
               />
 
-              <CustomDropdown
-                options={requestState?.data?.Result?.map((data: statesType) => {
-                  return { label: data?.State, value: data?.Id };
-                })}
-                label="Delivery State"
-                state={state}
-                setState={setState}
-              />
+              {orderItem?.ShippingOption?.toLowerCase() === "dhl" && (
+                <CustomDropdown
+                  options={requestState?.data?.Result?.map(
+                    (data: statesType) => {
+                      return { label: data?.State, value: data?.Id };
+                    }
+                  )}
+                  label="Delivery State"
+                  state={state}
+                  setState={setState}
+                />
+              )}
 
               <View
                 style={{
@@ -273,40 +359,54 @@ const ShippingOptions = () => {
                 <ThemedText>{price}</ThemedText>
               </View>
 
-              {shippingFee?.data && (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                    gap: 32,
-                    paddingVertical: 8,
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#000",
-                    marginBottom: 8,
-                  }}
-                >
-                  <ThemedText>Shipping Fee: </ThemedText>
-                  <ThemedText>
-                    ₦
-                    {formatCurrency(
-                      shippingFee?.data?.SingleResult?.ShippingFee
-                    )}{" "}
-                  </ThemedText>
-                </View>
-              )}
+              {shippingFee?.data &&
+                orderItem?.ShippingOption?.toLowerCase() === "dhl" && (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      gap: 32,
+                      paddingVertical: 8,
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#000",
+                      marginBottom: 8,
+                    }}
+                  >
+                    <ThemedText>Shipping Fee: </ThemedText>
+                    <ThemedText>
+                      ₦
+                      {formatCurrency(
+                        shippingFee?.data?.SingleResult?.ShippingFee
+                      )}{" "}
+                    </ThemedText>
+                  </View>
+                )}
 
               <CustomButton
-                text={`Make Payment ${
+                text={`Make Payment (${
                   addedPriceWithFee
                     ? `₦${formatCurrency(addedPriceWithFee)}`
                     : ""
-                }`}
+                })`}
                 type="secondary"
-                onPress={() => router.push("/payment-options")}
+                onPress={() => {
+                  if (userDetailsAreDifferent) {
+                    updateuserShippingAddressHandler();
+                  } else {
+                    router.push("/payment-options");
+                  }
+                }}
                 style={{ marginTop: 16 }}
-                disabled={!price || !shippingFee?.data}
-                loading={shippingFee?.isLoading}
+                disabled={
+                  orderItem?.ShippingOption?.toLowerCase() === "dhl"
+                    ? !price || !addedPriceWithFee || !orderItem?.ShippingFee
+                    : !price || !addedPriceWithFee
+                }
+                loading={
+                  shippingFee?.isLoading ||
+                  updateShippingAddressRequestState?.isLoading
+                }
               />
             </>
           </TouchableWithoutFeedback>

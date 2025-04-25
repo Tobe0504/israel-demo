@@ -5,7 +5,7 @@ import CartItem from "./CartItem";
 
 type CartProductContainerType = {
   data: cartItemType[];
-  request?: () => void;
+  request?: (load: boolean) => void;
   setState: Dispatch<SetStateAction<cartItemType[]>>;
 };
 

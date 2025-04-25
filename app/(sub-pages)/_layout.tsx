@@ -16,7 +16,7 @@ export default function SubPagesLayout() {
       />
       <Stack.Screen
         name="all-products"
-        options={{ header: () => <Header /> }}
+        options={{ header: () => <Header isBack /> }}
       />
       <Stack.Screen
         name="payment-options"
@@ -52,26 +52,18 @@ export default function SubPagesLayout() {
           ),
         })}
       />
+
       <Stack.Screen
-        name="filter"
+        name="interswitch"
         options={({ route }) => ({
           header: () => (
             <ActiveUserHeader
-              title={route?.name === "filter" ? "Filter" : ""}
+              title={route?.name === "interswitch" ? "Interswitch" : ""}
             />
           ),
         })}
       />
-      <Stack.Screen
-        name="products"
-        options={({ route }) => ({
-          header: () => (
-            <ActiveUserHeader
-              title={route?.name === "products" ? "Products" : ""}
-            />
-          ),
-        })}
-      />
+
       <Stack.Screen
         name="product/[productId]"
         options={({ route }) => ({
@@ -84,14 +76,24 @@ export default function SubPagesLayout() {
           ),
         })}
       />
+
+      <Stack.Screen
+        name="order-success"
+        options={({ route }) => ({
+          header: () => (
+            <ActiveUserHeader
+              title={
+                route?.name === "order-success" ? "Order Confirmation" : ""
+              }
+            />
+          ),
+        })}
+      />
+
       <Stack.Screen
         name="search"
         options={({ route }) => ({
-          header: () => (
-            <Header
-            //   title={route?.name === "search" ? "Search " : ""}
-            />
-          ),
+          header: () => <Header isBack />,
         })}
       />
       <Stack.Screen
@@ -106,6 +108,7 @@ export default function SubPagesLayout() {
           ),
         })}
       />
+
       <Stack.Screen
         name="suggestions"
         options={({ route }) => ({
@@ -123,6 +126,17 @@ export default function SubPagesLayout() {
           header: () => (
             <ActiveUserHeader
               title={route?.name === "my-list" ? "My List" : ""}
+            />
+          ),
+        })}
+      />
+
+      <Stack.Screen
+        name="my-orders"
+        options={({ route }) => ({
+          header: () => (
+            <ActiveUserHeader
+              title={route?.name === "my-orders" ? "My Orders" : ""}
             />
           ),
         })}

@@ -1,11 +1,9 @@
 import CategoriesCard from "@/components/CategoriesCard";
 import CustomButton from "@/components/CustomButton";
 import { generateImageURL } from "@/helpers/generateImageURL";
-import usePrice from "@/hooks/usePrice";
 import { productType } from "@/utils/types";
 import { useRouter } from "expo-router";
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { SafeAreaView, View, ViewComponent, ViewProps } from "react-native";
+import { Dispatch, SetStateAction } from "react";
 import { FlatList } from "react-native";
 import { ThemedText } from "./ThemedText";
 
@@ -62,22 +60,24 @@ const ProductsListings = ({
         </ThemedText>
       )}
 
-      <CustomButton
-        text="Load more..."
-        type="null"
-        style={{ marginVertical: 32 }}
-        onPress={() => {
-          if (setPageNumber)
-            if (data?.length > 0) {
-              setPageNumber((prevState) => {
-                return prevState + 1;
-              });
-            } else {
-              setPageNumber(1);
-            }
-        }}
-        loading={loading}
-      />
+      {data?.length > 0 && (
+        <CustomButton
+          text="Load more..."
+          type="null"
+          style={{ marginVertical: 32 }}
+          onPress={() => {
+            if (setPageNumber)
+              if (data?.length > 0) {
+                setPageNumber((prevState) => {
+                  return prevState + 30;
+                });
+              } else {
+                setPageNumber(30);
+              }
+          }}
+          loading={loading}
+        />
+      )}
     </>
   );
 };

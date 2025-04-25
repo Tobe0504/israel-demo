@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { AuthContext } from "@/context/AuthContext";
+import { capitalize } from "@/helpers/capitalize";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { router } from "expo-router";
 import React, { useContext } from "react";
@@ -19,7 +20,9 @@ const CustomDrawer = ({ props }: any) => {
           justifyContent: "center",
         }}
       >
-        <ThemedText type="defaultSemiBold">Hello, {user?.Name}</ThemedText>
+        <ThemedText type="defaultSemiBold">
+          {user ? `Hello, ${capitalize(user?.Name as string)}` : "Welcome"}
+        </ThemedText>
       </View>
 
       <DrawerItem
@@ -47,6 +50,13 @@ const CustomDrawer = ({ props }: any) => {
             label="My Account"
             onPress={() => {
               router.push("/my-account");
+            }}
+          />
+
+          <DrawerItem
+            label="My Orders"
+            onPress={() => {
+              router.push("/my-orders");
             }}
           />
         </>

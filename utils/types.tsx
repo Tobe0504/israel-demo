@@ -284,3 +284,29 @@ export type lightingDataType = {
   DiningSeater?: null | number;
   Skip?: null | number;
 };
+
+export type filterType = {
+  ProductTypes: number[];
+  DesignTypes: number[];
+  SpaceType: number[];
+  ColorTypes: number[];
+  HeightTypes: number[];
+  MaximumPrice: number;
+  MinimumPrice: number;
+  SpaceID: number;
+  IsFeatured: boolean;
+  Skip: number;
+};
+
+export type filterContextType = {
+  ProductTypes: string;
+  DesignTypes: string;
+  SpaceType: string;
+  ColorTypes: string;
+  HeightTypes: string;
+  MaximumPrice: number;
+  MinimumPrice: number;
+  SpaceID: number;
+  IsFeatured: boolean;
+  Skip: number;
+};

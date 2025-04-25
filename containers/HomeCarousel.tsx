@@ -11,6 +11,9 @@ import {
 import { useRouter } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 import { ThemedText } from "@/components/ThemedText";
+import { Dimensions } from "react-native";
+
+const screenWidth = Dimensions.get("window").width;
 
 const carouselElements = [
   {
@@ -74,7 +77,7 @@ const HomeCarousel = () => {
         onViewableItemsChanged={onViewRef.current}
         viewabilityConfig={{ viewAreaCoveragePercentThreshold: 50 }}
         renderItem={({ item }) => (
-          <View style={styles.slide}>
+          <View style={{ ...styles.slide, width: screenWidth }}>
             <Image source={item.image} style={styles.image} />
             <ThemedText type="title" style={styles.textHeader}>
               {item.title}
@@ -109,8 +112,7 @@ const HomeCarousel = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 32,
-    paddingHorizontal: 32,
+    paddingBottom: 32,
     backgroundColor: "#fff",
   },
   slide: {
@@ -140,6 +142,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 32,
+    paddingHorizontal: 32,
   },
   carouselDots: {
     flexDirection: "row",

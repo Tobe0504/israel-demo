@@ -21,13 +21,14 @@ const AllProducts = () => {
 
   const handleGetProductsByCategoryId = () => {
     requestHandler({
-      url: `api/⁠product/getApprovedProductsAndroid?ims=${pageNumber}`,
+      url: `/api/product/getApprovedProductsAndroid?iks=${pageNumber}`,
       //   load: false,
       method: "GET",
       state: requestState,
       setState: setRequestState,
       errorFunction(err) {
         handleError(err);
+        console.log(err?.response);
       },
     });
   };

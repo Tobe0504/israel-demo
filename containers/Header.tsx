@@ -5,7 +5,9 @@ import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { DrawerActions } from "@react-navigation/native";
 
-const Header = () => {
+type HeaderTypes = { isBack?: boolean };
+
+const Header = ({ isBack }: HeaderTypes) => {
   // Router
   const router = useRouter();
   const navigation = useNavigation();
@@ -21,8 +23,8 @@ const Header = () => {
         backgroundColor: "#fff",
       }}
     >
-      {!navigation.canGoBack() ? (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+      {isBack ? (
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       ) : (

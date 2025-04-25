@@ -20,7 +20,7 @@ import { Button, Image, TextInput, View } from "react-native";
 
 type CartItemType = {
   data: cartItemType;
-  request?: () => void;
+  request?: (load: boolean) => void;
   setState?: Dispatch<SetStateAction<cartItemType[]>>;
 };
 
@@ -79,7 +79,7 @@ const CartItem = ({ data, request, setState }: CartItemType) => {
       },
       successFunction() {
         if (request) {
-          request();
+          request(false);
         }
       },
     });

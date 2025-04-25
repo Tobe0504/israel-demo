@@ -9,7 +9,7 @@ import { useRouter } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 
-const LightingExplorerProducts = () => {
+const FilterProducts = () => {
   // States
   const [requestState, setRequestState] = useState<requestType>({
     isLoading: false,
@@ -18,7 +18,7 @@ const LightingExplorerProducts = () => {
   });
 
   // COntext
-  const { lightingData } = useContext(AuthContext);
+  const { productsFilterData } = useContext(AuthContext);
 
   // Router
   const router = useRouter();
@@ -29,9 +29,9 @@ const LightingExplorerProducts = () => {
   // Requests
   const getLightingProducts = () => {
     requestHandler({
-      url: "api/product/getXplorerProducts",
+      url: "api/product/getFilteredProducts",
       method: "POST",
-      data: lightingData,
+      data: productsFilterData,
       state: requestState,
       setState: setRequestState,
       errorFunction(err) {
@@ -41,12 +41,12 @@ const LightingExplorerProducts = () => {
     });
   };
 
+  console.log(productsFilterData, "Filter");
+
   //   Effects
   useEffect(() => {
-    if (lightingData?.BiggerSpace) {
-      getLightingProducts();
-    }
-  }, [lightingData?.BiggerSpace]);
+    getLightingProducts();
+  }, []);
 
   return (
     <ScrollView
@@ -57,7 +57,8 @@ const LightingExplorerProducts = () => {
     >
       <ProductsHeader
         title="Suggested Products for"
-        caption="Lighting Explorer"
+        caption="Filtered"
+        isNotFilter
       />
 
       {requestState?.isLoading ? (
@@ -72,4 +73,4 @@ const LightingExplorerProducts = () => {
   );
 };
 
-export default LightingExplorerProducts;
+export default FilterProducts;

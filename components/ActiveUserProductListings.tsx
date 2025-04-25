@@ -7,8 +7,8 @@ import { ThemedText } from "./ThemedText";
 
 type ActiveUserProductListingsType = {
   data: productType[];
-  onDelete: (id: number) => void;
-  loading: boolean;
+  onDelete?: (id: number) => void;
+  loading?: boolean;
 };
 
 const ActiveUserProductListings = ({

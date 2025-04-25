@@ -1,0 +1,4 @@
+Starting project at /Users/mac/Desktop/Israel/israel-demo
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
