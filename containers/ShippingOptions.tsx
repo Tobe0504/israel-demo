@@ -2,7 +2,6 @@ import CustomButton from "@/components/CustomButton";
 import { ThemedText } from "@/components/ThemedText";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ScrollView, Platform, View, Keyboard } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import CustomInput from "@/components/Input";
@@ -15,12 +14,13 @@ import Loader from "@/components/Loader";
 import usePrice from "@/hooks/usePrice";
 import { formatCurrency } from "@/helpers/formatAmount";
 import useError from "@/hooks/useError";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 // Constants
 const shippingOptions = ["In-Store Pickup", "DHL"];
 
 const ShippingOptions = () => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(String(new Date()));
   const [show, setShow] = useState(false);
   const [page, setPage] = useState("pickupOption");
   const [orderDetails, setOrderDetails] = useState({
@@ -243,27 +243,50 @@ const ShippingOptions = () => {
           />
 
           {show && (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 16,
+            // <View
+            //   style={{
+            //     alignItems: "center",
+            //     justifyContent: "center",
+            //     marginTop: 16,
+            //   }}
+            // >
+            //   <DateTimePicker
+            //     value={date}
+            //     mode="date"
+            //     display={Platform.OS === "ios" ? "inline" : "default"}
+            //     onChange={onChange}
+            //     textColor="#000"
+            //     style={{
+            //       backgroundColor: "#000",
+            //       borderRadius: 5,
+            //       padding: 16,
+            //     }}
+            //     minimumDate={new Date()}
+            //   />
+            // </View>
+
+            <RNDateTimePicker
+              value={new Date(date)}
+              mode="date"
+              display={Platform.OS === "android" ? "default" : "inline"}
+              minimumDate={new Date()}
+              themeVariant="light"
+              accentColor="#000"
+              onChange={(e) => {
+                const timestamp = e?.nativeEvent?.timestamp;
+                const date = new Date(timestamp);
+
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+
+                const formatted = `${year}-${month}-${day}`;
+
+                setDate(formatted);
+
+                setPage("info");
               }}
-            >
-              <DateTimePicker
-                value={date}
-                mode="date"
-                display={Platform.OS === "ios" ? "inline" : "default"}
-                onChange={onChange}
-                textColor="#000"
-                style={{
-                  backgroundColor: "#000",
-                  borderRadius: 5,
-                  padding: 16,
-                }}
-                minimumDate={new Date()}
-              />
-            </View>
+            />
           )}
         </>
       ) : page === "pickupOption" ? (
