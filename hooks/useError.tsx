@@ -2,13 +2,17 @@ import { storeAsyncData } from "@/helpers/asyncStorageHandlers";
 import { LOCAL_STORAGE_REDIRECT_ROUTE } from "@/utils/constants";
 import { AxiosError } from "axios";
 import { usePathname, useRouter } from "expo-router";
-import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 
 const useError = () => {
   // Router
   const router = useRouter();
   const pathname = usePathname();
+
+  const forceRedirectToSignIn = async (pathname: string) => {
+    await storeAsyncData(LOCAL_STORAGE_REDIRECT_ROUTE, pathname);
+    router.push("/sign-in");
+  };
 
   const handleError = async (error: AxiosError) => {
     if (error?.status === 401) {
@@ -33,7 +37,7 @@ const useError = () => {
     });
   };
 
-  return { handleError };
+  return { handleError, forceRedirectToSignIn };
 };
 
 export default useError;

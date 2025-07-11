@@ -8,6 +8,7 @@
       "paystack_secret_key": "sk_test_cbbccadee059e4afa47053d8806fd65b835f2476",
       "paystack_public_key": "pk_test_df60e0bbfa70181a3a3ea3efa256954a35b5a5db",
       "flutterwave_public_key": "FLWPUBK_TEST-fcec4a596a3168885228ce0b43d4f47a-X",
+      "flutterwave_secret_key": "FLWSECK_TEST-86b84ca766ba4ddc88d92d1be3a2bb7e-X",
       "googge_web_client": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com",
       "google_ios_client_id": "736549357378-b6r8ns33phcqu32oivt86r8jeagedqg8.apps.googleusercontent.com",
       "facebook_app_id": "664429779429555",
@@ -81,7 +82,8 @@
       ],
       "expo-font",
       "react-native-fbsdk-next",
-      "expo-tracking-transparency"
+      "expo-tracking-transparency",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

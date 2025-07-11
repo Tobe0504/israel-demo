@@ -28,7 +28,6 @@ const AllProducts = () => {
       setState: setRequestState,
       errorFunction(err) {
         handleError(err);
-        console.log(err?.response);
       },
     });
   };

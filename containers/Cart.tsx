@@ -1,6 +1,5 @@
 import Loader from "@/components/Loader";
 import { AuthContext } from "@/context/AuthContext";
-import { getAsyncData } from "@/helpers/asyncStorageHandlers";
 import { requestHandler } from "@/helpers/requestHandler";
 import useError from "@/hooks/useError";
 import axiosInstance from "@/services";

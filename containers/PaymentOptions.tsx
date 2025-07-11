@@ -16,6 +16,13 @@ import useToast from "@/hooks/useToast";
 import { AuthContext } from "@/context/AuthContext";
 import { getAsyncData } from "@/helpers/asyncStorageHandlers";
 import { LOCAL_STORAGE_BASE_CURRENCY } from "@/utils/constants";
+import {
+  verifyFlutterwaveTransaction,
+  verifyTransaction,
+} from "@/services/services";
+import { getTodaysDate } from "@/helpers/datehandlers";
+import { logger } from "react-native-logs";
+import { generateRandomId } from "@/helpers/generateRandomId";
 
 const PaymentOptions = () => {
   // States
@@ -30,7 +37,8 @@ const PaymentOptions = () => {
   const [currency, setCurrency] = useState("");
 
   // Context
-  const { orderItem, user, setOrderItem } = useContext(AuthContext);
+  const { orderItem, user, setOrderItem, orderItemHandler } =
+    useContext(AuthContext);
 
   // Env
   const { flutterwave_public_key }: any = Constants?.expoConfig?.extra;
@@ -41,6 +49,8 @@ const PaymentOptions = () => {
   // Hooks
   const { handleError } = useError();
   const { showToast } = useToast();
+
+  const log = logger.createLogger();
 
   // Requests
 
@@ -54,6 +64,28 @@ const PaymentOptions = () => {
         handleError(err);
       },
     });
+  };
+
+  const verifyPayment = async (reference: string) => {
+    try {
+      const res = await verifyFlutterwaveTransaction(reference);
+
+      if (res) {
+        orderItemHandler();
+
+        setOrderItem((prevState) => {
+          return {
+            ...prevState,
+            ReferenceCode: res?.data?.tx_ref,
+            PaymentTimeStamp: res?.data?.created_at,
+          };
+        });
+      }
+    } catch (error) {
+      log.debug(JSON.stringify(error), "Validate error");
+      handleError(error as any);
+    } finally {
+    }
   };
 
   //   Utils
@@ -74,8 +106,6 @@ const PaymentOptions = () => {
       };
     });
   };
-
-  console.log(orderItem, "order");
 
   //   Efffects
   useEffect(() => {
@@ -152,7 +182,17 @@ const PaymentOptions = () => {
       {(activePaymentMethod as paymentMethodTypes)?.Name?.toLowerCase() ===
         "flutterwave" && (
         <PayWithFlutterwave
-          onRedirect={() => {
+          onRedirect={(res) => {
+            verifyPayment(res?.transaction_id);
+            setOrderItem((prevstate) => {
+              return {
+                ...prevstate,
+                TransactionRef: res?.data?.transactionRef?.reference,
+                PaymentTimeStamp: getTodaysDate(),
+                TransactionStatus: res?.data?.event,
+              };
+            });
+
             showToast(
               "Payment Successful!",
               "Your Payment was made successfully",
@@ -165,6 +205,7 @@ const PaymentOptions = () => {
               "Your Payment did not go through",
               "error"
             );
+            router.back();
           }}
           onAbort={() => {
             showToast(
@@ -176,7 +217,7 @@ const PaymentOptions = () => {
           options={{
             amount: Number(orderItem?.TotalPricePlusFee) || 200,
             authorization: flutterwave_public_key,
-            tx_ref: "1234",
+            tx_ref: generateRandomId(),
             payment_options:
               "card,account,ussd,banktransfer,mpesa,barter,qr,bank",
             customer: {

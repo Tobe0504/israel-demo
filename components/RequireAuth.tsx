@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { getAsyncData, storeAsyncData } from "@/helpers/asyncStorageHandlers";
 import { LOCAL_STORAGE_AUTH_KEY_NAME } from "@/utils/constants";
 import { useRouter } from "expo-router";

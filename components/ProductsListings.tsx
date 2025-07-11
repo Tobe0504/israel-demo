@@ -39,7 +39,8 @@ const ProductsListings = ({
                   margin: 8,
                 }}
                 imageUrl={generateImageURL(
-                  item?.ProductImage[0].MobileImageUrl
+                  item?.ProductImage[0].MobileImageUrl ||
+                    item?.ProductImage[0]?.WebImageUrl
                 )}
                 onPress={() => {
                   router.push(`/product/${item?.Id}`);

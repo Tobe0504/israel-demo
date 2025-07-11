@@ -51,16 +51,21 @@ const ProductCard = ({ data, loading, onDelete }: ProductCardTypes) => {
       }}
       onPress={() => router.push(`/product/${data?.Id}`)}
     >
-      <Image
-        source={{
-          uri: generateImageURL(data?.ProductImage[0]?.MobileImageUrl),
-        }}
-        style={{
-          width: 65,
-          height: 79,
-          borderRadius: 5,
-        }}
-      />
+      {data?.ProductImage && (
+        <Image
+          source={{
+            uri: generateImageURL(
+              data?.ProductImage[0]?.MobileImageUrl ||
+                data?.ProductImage["0"]?.MobileImageUrl
+            ),
+          }}
+          style={{
+            width: 65,
+            height: 79,
+            borderRadius: 5,
+          }}
+        />
+      )}
 
       <View style={{ flexShrink: 1, flex: 1 }}>
         <ThemedText
@@ -69,10 +74,9 @@ const ProductCard = ({ data, loading, onDelete }: ProductCardTypes) => {
           {data?.Name}
         </ThemedText>
         <ThemedText>
-          {/* TODO:Color how? */}
           Colour:
           <ThemedText style={{ fontFamily: "PoppinsMedium" }}>
-            Silver
+            {data?.ColorType?.Name}
           </ThemedText>
         </ThemedText>
       </View>
@@ -82,12 +86,14 @@ const ProductCard = ({ data, loading, onDelete }: ProductCardTypes) => {
         {loading ? (
           <ActivityIndicator size={18} />
         ) : (
-          <Ionicons
-            name="trash-outline"
-            color="#FF0000"
-            size={18}
-            onPress={() => onDelete && onDelete(data?.Id)}
-          />
+          onDelete && (
+            <Ionicons
+              name="trash-outline"
+              color="#FF0000"
+              size={18}
+              onPress={() => onDelete && onDelete(data?.Id)}
+            />
+          )
         )}
       </View>
     </TouchableOpacity>

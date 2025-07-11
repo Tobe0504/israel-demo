@@ -68,7 +68,7 @@ const Search = () => {
           ) : (
             <>
               <SearchProducts
-                data={requestState?.data?.Result}
+                data={requestState}
                 setPageNumber={setPageNumber}
               />
             </>

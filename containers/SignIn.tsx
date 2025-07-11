@@ -41,12 +41,7 @@ const SignIn = () => {
   );
 
   // Context
-  const {
-    handleGetuserByEmail,
-    signInWithGoogle,
-
-    // handleFacebookAuth
-  } = useContext(AuthContext);
+  const { handleGetuserByEmail, signInWithGoogle } = useContext(AuthContext);
 
   // Requests
   const signInHandler = async () => {
@@ -73,16 +68,18 @@ const SignIn = () => {
           try {
             const data = await getAsyncData(LOCAL_STORAGE_REDIRECT_ROUTE);
             if (data && data !== "/sign-in") {
-              router.push(data as any);
+              router.replace(data as any);
             } else {
-              router.push("/dashboard");
+              router.replace("/dashboard");
             }
           } catch (error) {
-            router.push("/dashboard");
+            router.replace("/dashboard");
           }
         };
 
-        rerouteToStoredRoute();
+        setTimeout(() => {
+          rerouteToStoredRoute();
+        }, 1000);
       },
       errorFunction(err) {
         Alert.alert("Error", (err?.response?.data as any)?.error, [

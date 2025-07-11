@@ -41,8 +41,6 @@ const FilterProducts = () => {
     });
   };
 
-  console.log(productsFilterData, "Filter");
-
   //   Effects
   useEffect(() => {
     getLightingProducts();

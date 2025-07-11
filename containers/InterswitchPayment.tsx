@@ -10,8 +10,6 @@ const InterswitchPayment = () => {
       onNavigationStateChange={(event) => {
         if (event.url.includes("return")) {
           // Handle successful or failed transaction
-
-          console.log("COmpleted");
         }
       }}
     />

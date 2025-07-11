@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/ThemedText";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ScrollView, Platform, View, Keyboard } from "react-native";
 import { AuthContext } from "@/context/AuthContext";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import CustomInput from "@/components/Input";
 import { inputChangeHandler } from "@/helpers/inputChangeHandler";
 import { TouchableWithoutFeedback } from "react-native";
@@ -15,6 +15,8 @@ import usePrice from "@/hooks/usePrice";
 import { formatCurrency } from "@/helpers/formatAmount";
 import useError from "@/hooks/useError";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { storeAsyncData } from "@/helpers/asyncStorageHandlers";
+import { logger } from "react-native-logs";
 
 // Constants
 const shippingOptions = ["In-Store Pickup", "DHL"];
@@ -58,9 +60,13 @@ const ShippingOptions = () => {
 
   //   Router
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Utils
+  const log = logger.createLogger();
 
   // Hooks
-  const { handleError } = useError();
+  const { handleError, forceRedirectToSignIn } = useError();
   const { returnExchangeRatedPrice, returnExchangeRateValueOnly } = usePrice();
 
   // Memos
@@ -99,7 +105,7 @@ const ShippingOptions = () => {
     });
   };
 
-  const updateuserShippingAddressHandler = () => {
+  const updateuserShippingAddressHandler = (type?: string) => {
     requestHandler({
       url: "/api/shippingAddress/insertShippingAddress",
       method: "POST",
@@ -108,12 +114,22 @@ const ShippingOptions = () => {
         PhoneNumber: orderDetails?.phone,
         Name: orderDetails?.fullName,
         Address: orderDetails?.address,
+        UserId: user?.Id,
       },
       state: updateShippingAddressRequestState,
       setState: setUpdateShippingAddressRequestState,
       requestCleanup: true,
-      successFunction() {
-        router.push("/payment-options");
+      successFunction(res) {
+        log.debug(res, "response");
+        setOrderItem((prevState) => {
+          return { ...prevState, ShippingId: res?.data?.SingleResult?.Id };
+        });
+
+        if (type === "delivery-option") {
+          setPage("pickup");
+        } else {
+          router.push("/payment-options");
+        }
       },
       errorFunction(err) {
         handleError(err);
@@ -145,7 +161,7 @@ const ShippingOptions = () => {
   // Effects
   useEffect(() => {
     if (!user) {
-      router.push("/sign-in");
+      forceRedirectToSignIn(pathname);
     } else {
       setOrderDetails((prevState) => {
         return {
@@ -303,11 +319,15 @@ const ShippingOptions = () => {
                       return { ...prevState, ShippingOption: data };
                     });
                     if (data?.toLowerCase() === "dhl") {
-                      setPage("pickup");
+                      updateuserShippingAddressHandler("delivery-option");
                     } else {
                       setPage("user");
                     }
                   }}
+                  loading={
+                    updateShippingAddressRequestState?.isLoading &&
+                    data?.toLowerCase() === "dhl"
+                  }
                 />
               );
             })}
@@ -415,7 +435,7 @@ const ShippingOptions = () => {
                 type="secondary"
                 onPress={() => {
                   if (userDetailsAreDifferent) {
-                    updateuserShippingAddressHandler();
+                    updateuserShippingAddressHandler("confirm-address");
                   } else {
                     router.push("/payment-options");
                   }

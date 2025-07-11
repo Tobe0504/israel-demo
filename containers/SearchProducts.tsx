@@ -11,7 +11,7 @@ const SearchProducts = ({ data, setPageNumber }: SearchProductsTypes) => {
   return (
     <>
       <ProductsListings
-        data={data?.data}
+        data={data?.data?.Result}
         setPageNumber={setPageNumber}
         loading={data?.isLoading}
       />

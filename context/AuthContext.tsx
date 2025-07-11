@@ -26,6 +26,7 @@ import Constants from "expo-constants";
 import { Alert } from "react-native";
 import useError from "@/hooks/useError";
 import { useRouter } from "expo-router";
+import useToast from "@/hooks/useToast";
 // import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 // import {
 //   AccessToken,
@@ -137,6 +138,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
 
   // Hooks
   const { handleError } = useError();
+  const { showToast } = useToast();
 
   // Router
   const router = useRouter();
@@ -293,8 +295,8 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
       state: orderItemState,
       setState: setOrderItemState,
       successFunction(res) {
-        // console.log(res, "Order success");
         router.push("/order-success");
+
         setOrderItem({
           Id: 0,
           UserId: 0,
@@ -323,6 +325,12 @@ const AuthContextProvider = ({ children }: AuthContextProviderTypes) => {
           ShippingDetails: null,
           ProductOrders: [],
         });
+
+        showToast(
+          "Order has been placed successfully",
+          "You will get an email regarding your order soon",
+          "success"
+        );
       },
       errorFunction(err) {
         handleError(err);

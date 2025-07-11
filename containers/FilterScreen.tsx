@@ -122,8 +122,6 @@ const FilterScreen: React.FC = () => {
     }
   }, [filterState]);
 
-  console.log(filterState, "Filter");
-
   const renderFilterContent = (): React.ReactNode => {
     if (activeFilter === "design") {
       return (

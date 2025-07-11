@@ -10,6 +10,7 @@ import { getTodaysDate } from "@/helpers/datehandlers";
 import { requestHandler } from "@/helpers/requestHandler";
 import { requestType } from "@/utils/types";
 import Loader from "@/components/Loader";
+import { verifyTransaction } from "@/services/services";
 
 const PaystackPaymentScreen = () => {
   // Env
@@ -20,7 +21,7 @@ const PaystackPaymentScreen = () => {
     useContext(AuthContext);
 
   // States
-  const [requestState, setRequestState] = useState<requestType>({
+  const [verifyRequestState, setVerifyRequestState] = useState<requestType>({
     isLoading: false,
     data: null,
     error: null,
@@ -33,63 +34,71 @@ const PaystackPaymentScreen = () => {
   const { showToast } = useToast();
   const { handleError } = useError();
 
+  // Env
+
   // Requests
-  const verifyPayment = (reference: string) => {
-    requestHandler({
-      url: `https://api.paystack.co/transaction/verify/${reference}`,
-      method: "GET",
-      state: requestState,
-      setState: setRequestState,
-      requestCleanup: true,
-      successFunction(res) {
-        console.log(res, "Payment details");
-      },
-      errorFunction(err) {
-        handleError(err);
-      },
+  const verifyPayment = async (reference: string) => {
+    setVerifyRequestState((prevState) => {
+      return { ...prevState, isLoading: true };
     });
+
+    try {
+      const res = await verifyTransaction(reference);
+
+      if (res) {
+        orderItemHandler();
+
+        setOrderItem((prevState) => {
+          return {
+            ...prevState,
+            ReferenceCode: res?.data?.data?.reference,
+            PaymentTimeStamp: res?.data?.data?.transaction_date,
+          };
+        });
+      }
+    } catch (error) {
+      handleError(error as any);
+    } finally {
+      setVerifyRequestState((prevState) => {
+        return { ...prevState, isLoading: false };
+      });
+    }
   };
 
   return (
     <View style={{ flex: 1 }}>
-      {requestState?.isLoading ? (
-        <Loader />
-      ) : (
-        <Paystack
-          paystackKey={paystack_public_key}
-          amount={Number(orderItem.TotalPricePlusFee)}
-          billingEmail={user?.Email as string}
-          activityIndicatorColor="green"
-          onSuccess={(res) => {
-            console.log(res, "The paystack response");
-            setOrderItem((prevstate) => {
-              return {
-                ...prevstate,
-                TransactionRef: res?.data?.transactionRef?.reference,
-                PaymentTimeStamp: getTodaysDate(),
-                TransactionStatus: res?.data?.event,
-              };
-            });
-            verifyPayment(res?.data?.transactionRef?.reference);
-            showToast(
-              "Payment Successful!",
-              "Your Payment was made successfully",
-              "success"
-            );
-            // orderItemHandler();
-          }}
-          currency={orderItem?.Currency as any}
-          onCancel={() => {
-            showToast(
-              "Payment Unsuccessful!",
-              "Your Payment did not go through",
-              "error"
-            );
-            router.back();
-          }}
-          autoStart={true}
-        />
-      )}
+      <Paystack
+        paystackKey={paystack_public_key}
+        amount={Number(orderItem.TotalPricePlusFee)}
+        billingEmail={user?.Email as string}
+        activityIndicatorColor="green"
+        onSuccess={(res) => {
+          verifyPayment(res?.data?.transactionRef?.reference);
+          setOrderItem((prevstate) => {
+            return {
+              ...prevstate,
+              TransactionRef: res?.data?.transactionRef?.reference,
+              PaymentTimeStamp: getTodaysDate(),
+              TransactionStatus: res?.data?.event,
+            };
+          });
+          showToast(
+            "Payment Successful!",
+            "Your Payment was made successfully",
+            "success"
+          );
+        }}
+        currency={orderItem?.Currency as any}
+        onCancel={() => {
+          showToast(
+            "Payment Unsuccessful!",
+            "Your Payment did not go through",
+            "error"
+          );
+          router.back();
+        }}
+        autoStart={true}
+      />
     </View>
   );
 };

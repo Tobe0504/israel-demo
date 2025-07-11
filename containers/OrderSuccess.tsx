@@ -43,7 +43,7 @@ const OrderSuccess = () => {
         type="secondary"
         text="Continue to explore"
         onPress={() => {
-          router.push("/dashboard");
+          router.replace("/dashboard");
         }}
       />
     </View>
@@ -79,8 +79,6 @@ const OrderSuccess = () => {
       />
     </View>
   );
-
-  console.log(orderItemState, "Order item state");
 
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>

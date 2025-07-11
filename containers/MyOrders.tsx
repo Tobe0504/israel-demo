@@ -6,6 +6,7 @@ import useError from "@/hooks/useError";
 import { requestType } from "@/utils/types";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
+import { logger } from "react-native-logs";
 
 const MyOrders = () => {
   // States
@@ -18,6 +19,9 @@ const MyOrders = () => {
   // COntext
   const { user } = useContext(AuthContext);
 
+  // UTils
+  const log = logger.createLogger();
+
   // Hooks
   const { handleError } = useError();
 
@@ -29,13 +33,14 @@ const MyOrders = () => {
       load,
       state: requestState,
       setState: setRequestState,
+      successFunction(res) {},
       errorFunction(err) {
         handleError(err);
       },
     });
   };
 
-  console.log(requestState?.data, "My Orders");
+  log.debug(requestState?.data?.Result[0]?.ProductOrders["0"]?.Product);
 
   //   Effects
   useEffect(() => {
@@ -50,7 +55,11 @@ const MyOrders = () => {
 
   return (
     <ScrollView style={{ backgroundColor: "#fff" }}>
-      <ActiveUserProductListings data={requestState?.data?.Result} />
+      <ActiveUserProductListings
+        data={requestState?.data?.Result?.map(
+          (data: any) => data?.ProductOrders["0"]?.Product
+        )}
+      />
     </ScrollView>
   );
 };
