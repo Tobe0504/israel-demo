@@ -17,7 +17,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c302cb72-13fd-42c6-97e2-fdb38a4e77c1"
+        "projectId": "8ca14441-06b9-43d8-9e36-8ac2b94a5a21"
       }
     },
     "version": "1.0.0",
@@ -87,6 +87,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "owner": "kizitech"
   }
 }
